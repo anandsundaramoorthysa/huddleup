@@ -39,6 +39,9 @@ Documentation, branding, and broken-link cleanup release. No functional CLI chan
 
 ### Fixed
 - **Every cross-repo documentation link** updated from `/main/` to `/master/` (16 instances across 4 files) — previously *all* 404'd because the repo default branch is `master`, not `main`. This includes CI status badge, README screenshots, and all CONTRIBUTING / SECURITY / CHANGELOG / LICENSE cross-links.
+- **`.github/workflows/ci.yml`** trigger branches changed from `[main]` to `[master]` — previously CI ran on no pushes or PRs because it watched a non-existent branch.
+- **`CONTRIBUTING.md`** "create your branch from `main`" → "create your branch from `master`" to match the actual default branch.
+- **`landing/README.md`** deploy hook description corrected from `main` to `master`.
 
 ---
 

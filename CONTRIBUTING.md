@@ -275,7 +275,7 @@ describe("detectTool", () => {
 ### Before You Submit
 
 1. **Discuss first** — open an [issue](https://github.com/anandsundaramoorthysa/huddleup/issues) for any non-trivial change
-2. **Fork the repo** and create your branch from `main`
+2. **Fork the repo** and create your branch from `master`
 3. **Install dependencies** with `npm install`
 4. **Compile** with `npm run build` — no errors
 5. **Test** with `npm test` — all tests pass

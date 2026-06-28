@@ -48,7 +48,7 @@ npx wrangler pages deploy dist --project-name huddleup-site
 
 ### GitHub Actions (recommended)
 
-Push to `main` triggers the workflow in the parent repo's `.github/workflows/` (planned). Required GitHub repository secrets:
+Push to `master` triggers the workflow in the parent repo's `.github/workflows/` (planned). Required GitHub repository secrets:
 
 | Secret | Description |
 |---|---|
