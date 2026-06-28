@@ -43,7 +43,7 @@ Session handoff tool for AI coding agents — snapshot and resume work across Cl
 
 <details>
 
-![Image](https://raw.githubusercontent.com/anandsundaramoorthysa/huddleup/main/assets/brand/logo.svg)
+![Image](https://raw.githubusercontent.com/anandsundaramoorthysa/huddleup/master/assets/brand/logo.svg)
 
 ### Category
 Coding
@@ -59,7 +59,7 @@ Coding
 
 ### Links
 - [GitHub](https://github.com/anandsundaramoorthysa/huddleup)
-- [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=huddleup.vscode-huddleup)
+- [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=AnandSundaramoorthySa.vscode-huddleup)
 - [Docs](https://github.com/anandsundaramoorthysa/huddleup#readme)
 </details>
 ```
@@ -102,4 +102,4 @@ huddleup resume streaming-chat-endpoint
 
 **Links:**
 - GitHub: https://github.com/anandsundaramoorthysa/huddleup
-- VS Code Extension: https://marketplace.visualstudio.com/items?itemName=huddleup.vscode-huddleup
+- VS Code Extension: https://marketplace.visualstudio.com/items?itemName=AnandSundaramoorthySa.vscode-huddleup
