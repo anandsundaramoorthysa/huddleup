@@ -4,33 +4,33 @@ import { SITE } from '../config';
 const features = [
   {
     title: 'Snapshot in seconds',
-    desc: 'Capture open files, git diff, terminal history, and AI chat context into a single portable snapshot file. No config needed.',
+    desc: 'Capture git diff, your one-line note, last AI messages, inferred open files, and the active branch into a per-thread markdown file. The AI tool config files HuddleUp generates carry a Token Exhaustion Protocol so the AI itself runs `huddleup snapshot` when context is about to overflow.',
     img: '/images/screenshot-snapshot.png',
     imgAlt: 'Terminal showing huddleup snapshot command',
   },
   {
     title: 'Resume instantly',
-    desc: 'Teammates run one `huddleup resume` command and get the exact same context — files, chat history, even terminal scrollback.',
+    desc: 'Teammates run one `huddleup resume` command and get a YOU ARE HERE briefing, the relevant files opened in the editor, and a context file the AI tool reads on its next prompt.',
     img: '/images/screenshot-resume.png',
     imgAlt: 'Terminal showing huddleup resume command',
   },
   {
     title: 'VS Code companion',
-    desc: 'The extension adds a sidebar panel, status bar widget, and context-menu commands so you never leave your editor.',
+    desc: 'The extension adds a sidebar panel with Snapshot, Resume, and Standup buttons plus a per-thread Resume/Archive list. Every action is also in the command palette.',
     img: '/images/screenshot-sidebar.png',
     imgAlt: 'VS Code sidebar showing HuddleUp extension panel',
   },
   {
-    title: 'Multi-tool support',
-    desc: 'Works with Cursor, Claude Code, Windsurf, Copilot, and Codex CLI. The adapter system auto-detects which AI tool created the session.',
+    title: 'Multi-tool capture',
+    desc: 'Works with Cursor, Claude Code, Windsurf, GitHub Copilot, and OpenAI Codex CLI. detectAllAdapters() captures messages from every detected tool and merges them into one snapshot — the thread\'s Tools field lists everyone who contributed.',
   },
   {
     title: 'Portable & private',
-    desc: 'Snapshots are local JSONL files — no cloud, no accounts, no data leaves your machine. Share via git, Slack, or any file transfer.',
+    desc: 'The whole .huddleup/ folder is plain markdown plus JSONL history — commit it to git, paste it in Slack, attach it to a Linear ticket. No cloud, no accounts, no data leaves your machine. Optional handoffWebhook posts a JSON payload when you explicitly call `huddleup handoff <teammate>`.',
   },
   {
     title: 'No lock-in',
-    desc: 'Open source (AGPL-3.0), CLI-first philosophy, zero dependencies beyond Node.js 18+. Uninstall any time with no residue.',
+    desc: 'Open source (AGPL-3.0), CLI-first, Node.js 20+. Dependencies are intentionally small (commander, inquirer, chalk, simple-git, conf). Uninstall any time — your .huddleup/ folder is still useful as plain markdown.',
   },
 ];
 ---
@@ -42,7 +42,7 @@ const features = [
     <p class="section-desc">{SITE.description}</p>
 
     <div class="features-grid">
-      {features.map((f, i) => (
+      {features.map((f) => (
         <article class="card feature-card">
           {f.img && (
             <div class="feature-screenshot screenshot-frame">

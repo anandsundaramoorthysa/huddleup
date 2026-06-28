@@ -1,11 +1,29 @@
 ---
 const adapters = [
-  { name: 'Cursor', icon: 'cursor', desc: 'Auto-detected from `.cursor/session.json` and history files.' },
-  { name: 'Claude Code', icon: 'claude', desc: 'Reads `~/.claude/sessions/` and `CLAUDE.md` project config.' },
-  { name: 'Windsurf', icon: 'windsurf', desc: 'Detects `.windsurf/sessions/` with full chat-log support.' },
-  { name: 'GitHub Copilot', icon: 'copilot', desc: 'Pulls from VS Code\'s Copilot chat history and diagnostics.' },
-  { name: 'Codex CLI', icon: 'codex', desc: 'Parses `.codex/sessions/` with conversation tree and file diffs.' },
-  { name: 'Custom', icon: 'custom', desc: 'Extend via the adapter API — bring your own AI tool client.' },
+  {
+    name: 'Cursor',
+    desc: 'Reads ~/.cursor/{sessions,chats}/ and the workspaceStorage folders under VS Code-style globalStorage on macOS, Linux, and Windows.',
+  },
+  {
+    name: 'Claude Code',
+    desc: 'Reads ~/.claude/projects/<hash>/*.jsonl (modern) and ~/.claude/sessions/*.jsonl (legacy). Writes CLAUDE.md with the Token Exhaustion Protocol.',
+  },
+  {
+    name: 'Windsurf',
+    desc: 'Detects ~/.windsurf/, ~/.codeium/, and the Windsurf/Codeium application data folders across platforms.',
+  },
+  {
+    name: 'GitHub Copilot',
+    desc: 'Reads VS Code globalStorage (github.copilot-chat) for Code, Code Insiders, and Cursor; also ~/.github/copilot/ and ~/.vscode/copilot/.',
+  },
+  {
+    name: 'Codex CLI',
+    desc: 'Detects ~/.codex/ and the Codex app data folders on macOS, Linux, and Windows. Parses JSON, JSONL, and plain-log session files.',
+  },
+  {
+    name: 'Custom',
+    desc: 'Add a new adapter in src/adapters/ — implement detect() + capture() and call registerAdapter(). About 80 lines. See docs/adapters.md.',
+  },
 ];
 ---
 
@@ -13,13 +31,13 @@ const adapters = [
   <div class="container">
     <span class="section-label">Adapters</span>
     <h2 class="section-title">Works with the AI tools you already use</h2>
-    <p class="section-desc">HuddleUp auto-detects which tool created a session. No manual mapping, no plugin hell.</p>
+    <p class="section-desc">HuddleUp auto-detects every tool installed on the machine. Multiple adapters can match; their messages and open-file lists merge into a single snapshot.</p>
 
     <div class="adapters-grid">
       {adapters.map(a => (
         <div class="card adapter-card">
-          <div class="adapter-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+          <div class="adapter-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12h8M12 8v8"/></svg>
           </div>
           <h3 class="adapter-name">{a.name}</h3>
           <p class="adapter-desc">{a.desc}</p>

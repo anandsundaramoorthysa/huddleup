@@ -16,6 +16,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pre-commit hook (`husky` + `lint-staged`) so PRs don't ship typecheck regressions.
 - More detailed `huddleup snapshot --verbose` output (parsed message roles, token estimates).
 
+### Landing site (`landing/` v1.0.3) — 2026-06-29
+
+> Landing-only patch. No CLI / VS Code extension changes; `huddleup` stays on 0.1.2.
+
+#### Fixed
+- **Landing content was lying** in three more components beyond the `QuickStart` block already corrected in 0.1.2:
+  - **HowItWorks** described a fictional CLI that wrote `session.huddleup.jsonl`, stashed git state, and replayed terminal scrollback — none of which the real `huddleup` does. Rewritten to show `huddleup init` → `snapshot` → `git add .huddleup/` → `resume <thread>` matching real behaviour.
+  - **Features** claimed *"zero dependencies beyond Node.js 18+"*. We require **Node 20+** and ship `commander`, `inquirer`, `chalk`, `simple-git`, `conf`. Rewritten and accurate.
+  - **Adapters** listed wrong detection paths (`.cursor/session.json`, `.codex/sessions/`, etc.). Rewritten with the real path lists that match `src/adapters/`.
+- **Cloudflare Pages deploy was failing** with `Project not found` because `huddleup-site` had never been created. Added an idempotent `wrangler pages project create` step plus a `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` sanity check at the top of the workflow, and `--commit-dirty=true` to silence the dirty-tree warning.
+- **`robots.txt` referenced `/sitemap-index.xml`** which was never generated (404). Added a static `landing/public/sitemap.xml` and pointed robots.txt at it.
+- **Tab-nabbing risk in 3 external links** (`Header.astro`, `CTA.astro`, and the GitHub button row): added `rel="noopener"` to every `target="_blank"` link. Audited and confirmed — zero external links remain without it.
+
 ---
 
 ## [0.1.2] — 2026-06-29
