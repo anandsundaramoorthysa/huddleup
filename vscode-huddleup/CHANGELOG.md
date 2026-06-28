@@ -18,6 +18,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.1] — 2026-06-29
+
+Marketplace-quality README + correct cross-repo URLs. No extension behaviour changes — same sidebar, same commands, same settings.
+
+### Changed
+- **README rewritten for the Marketplace listing**: marketplace badges, comparison table against static rules files, requirements, settings, "how the snapshot is built" diagram, links to CHANGELOG / CONTRIBUTING / SECURITY.
+- **All screenshots and cross-document links now use absolute `raw.githubusercontent.com/.../master/…` URLs** so they actually render on the Marketplace listing (relative paths and `/main/` paths both fail there).
+
+### Fixed
+- Cross-repo links updated from `/main/` to `/master/` — previously every link from this README to the parent repo 404'd.
+
+### Packaged
+- Repackaged `vscode-huddleup-0.1.1.vsix` (18 files, ≈130 KB) with the new README + CHANGELOG.
+
+---
+
 ## [0.1.0] — 2026-06-29
 
 First public release. Packaged as `vscode-huddleup-0.1.0.vsix`.
@@ -45,5 +61,6 @@ First public release. Packaged as `vscode-huddleup-0.1.0.vsix`.
 
 ---
 
-[Unreleased]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.0

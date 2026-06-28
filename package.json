@@ -1,6 +1,6 @@
 {
   "name": "huddleup",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Huddle up your team's AI coding sessions. Snapshot and resume work across Claude Code, Cursor, Codex, Copilot, and Windsurf.",
   "type": "module",
   "bin": {

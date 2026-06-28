@@ -2,7 +2,7 @@
   "name": "vscode-huddleup",
   "displayName": "HuddleUp",
   "description": "Huddle up your team's AI coding sessions — snapshot and resume work across AI tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "AnandSundaramoorthySa",
   "license": "AGPL-3.0",
   "repository": {

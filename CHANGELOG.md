@@ -19,6 +19,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.1] — 2026-06-29
+
+Documentation, branding, and broken-link cleanup release. No functional CLI changes — existing scripts and adapters work unchanged.
+
+### Added
+- `CHANGELOG.md` (this file) following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
+- `SECURITY.md` with private disclosure policy, scope table, and hardening notes.
+- `landing/README.md` — tech stack, dev/build/deploy commands, structure, SEO checklist.
+- `landing/.gitignore` for `.astro/`, `dist/`, `node_modules/`, `.wrangler/`.
+
+### Changed
+- **Main `README.md` rewritten** to match the project's documentation quality bar: theme-aware logo, badges, navigation links, embedded screenshots, status table, adapter table, architecture diagram, acknowledgements.
+- **`docs/getting-started.md` rewritten** with a 10-section TOC, prerequisites table, worked Anand → Priya handoff example, non-interactive / CI usage, pre-push hook example, and a six-item troubleshooting section.
+- **`docs/adapters.md` rewritten** with a 9-section TOC, lifecycle diagram, full TypeScript interface, OS-specific detection patterns, reusable parsing helpers, and integration-test snippets.
+- Landing footer "AGPL-3.0" link now resolves: was `…/blob/main/LICENSE.txt` (404 — wrong branch *and* wrong filename), is now `…/blob/master/LICENSE`.
+- `rel="noopener"` added to external links in the landing footer.
+- Publisher name corrected in `docs/awesome-list-submissions.md` to `AnandSundaramoorthySa.vscode-huddleup`.
+
+### Fixed
+- **Every cross-repo documentation link** updated from `/main/` to `/master/` (16 instances across 4 files) — previously *all* 404'd because the repo default branch is `master`, not `main`. This includes CI status badge, README screenshots, and all CONTRIBUTING / SECURITY / CHANGELOG / LICENSE cross-links.
+
+---
+
 ## [0.1.0] — 2026-06-29
 
 The first public release of HuddleUp — CLI + VS Code extension + brand kit + landing site.
@@ -82,7 +105,9 @@ The first public release of HuddleUp — CLI + VS Code extension + brand kit + l
 
 ## Release tags
 
+- [`v0.1.1`](https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.1)
 - [`v0.1.0`](https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.0)
 
-[Unreleased]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.0
