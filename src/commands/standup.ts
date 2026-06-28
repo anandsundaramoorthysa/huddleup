@@ -1,36 +1,41 @@
 import { listThreads } from '../core/thread.js';
-import { readHistory, HistoryEvent } from '../core/history.js';
+import { readHistory } from '../core/history.js';
 import { colors } from '../utils/colors.js';
 import * as logger from '../utils/logger.js';
 
-export async function standup(): Promise<void> {
-  logger.header('HuddleUp — Standup');
-
+export async function standup(options?: { json?: boolean; days?: number }): Promise<void> {
+  const days = options?.days ?? 1;
   const threads = listThreads();
-  const history = readHistory(1);
+  const todayEvents = readHistory(days);
+
+  if (options?.json) {
+    process.stdout.write(JSON.stringify({ threads, events: todayEvents }, null, 2) + '\n');
+    return;
+  }
+
+  logger.header('HuddleUp - Standup');
 
   console.log(colors.bold('\n  Active Threads:'));
   if (threads.length === 0) {
     console.log('    No active threads.');
   } else {
     for (const t of threads) {
-      const icon = t.status === 'blocked' ? '🔴' : '🟡';
-      console.log(`    ${icon} ${colors.bold(t.name)} ${colors.dim(`(${t.owner})`)}`);
+      const tag = `[${t.status}]`.padEnd(10);
+      const note = t.lastNote ? colors.dim(` - "${t.lastNote.slice(0, 60)}"`) : '';
+      const when = t.updated ? colors.dim(` (${t.updated.slice(0, 10)})`) : '';
+      console.log(`    ${colors.dim(tag)} ${colors.bold(t.title)} ${colors.dim(`(${t.owner})`)}${when}${note}`);
     }
   }
 
-  const todayEvents = history.filter(e => {
-    const today = new Date().toISOString().slice(0, 10);
-    return e.timestamp.slice(0, 10) === today;
-  });
-
-  console.log(colors.bold('\n  Today\'s Activity:'));
+  console.log(colors.bold(`\n  Activity (last ${days} day${days === 1 ? '' : 's'}):`));
   if (todayEvents.length === 0) {
-    console.log('    No events today.');
+    console.log('    No events.');
   } else {
     for (const e of todayEvents.slice(-10)) {
-      const icon = e.command === 'snapshot' ? '📸' : e.command === 'handoff' ? '🤝' : '📝';
-      console.log(`    ${icon} ${e.command} ${e.thread ? `→ ${e.thread}` : ''} ${e.note ? `— ${e.note.slice(0, 60)}` : ''}`);
+      const when = e.timestamp.slice(11, 16);
+      const cmd = `[${e.command}]`.padEnd(11);
+      const noteSuffix = e.note ? ` - ${e.note.slice(0, 60)}` : '';
+      console.log(`    ${colors.dim(when)} ${colors.dim(cmd)} ${e.thread || ''}${colors.dim(noteSuffix)}`);
     }
   }
 

@@ -1,20 +1,19 @@
-# HuddleUp — Agent Configuration
+# HuddleUp - Agent Configuration
 
-This project uses HuddleUp to preserve and hand off AI coding sessions across the team.
+This project uses HuddleUp to preserve and hand off AI coding sessions across the team. This file applies to OpenAI Codex, GitHub Copilot, Windsurf, and any other agent that respects an `AGENTS.md` convention.
 
-## Source of Truth
-Project-level context is in `.huddleup/charter.md`. Read it first for stack, conventions, and team info.
+{{charterBlock}}
 
 ## Active Threads
 {{activeThreads}}
 
 ## Token Exhaustion Protocol
-When you sense this session is approaching its limit (~10% tokens remaining), OR if the user says "last message", "wrapping up", or "handoff":
+When this session is near its token limit (~{{tokenThreshold}}% remaining), OR if the user says "last message" / "wrapping up" / "handoff":
 1. Run `huddleup snapshot` to save the full session state.
-2. Include in the snapshot: this entire conversation, open files, key decisions made, dead ends explored, and what should be done next.
+2. Capture: the conversation, open files, key decisions, dead ends, next steps.
 3. If `huddleup` is not available, write a summary manually to `.huddleup/threads/current-session.md`.
 
 This ensures zero context loss when the next developer resumes the work.
 
 ## Handoff Format
-When resuming a previous session, read `.huddleup/threads/<thread-name>.md` to understand where the last developer left off.
+When resuming work, read `.huddleup/threads/<thread-name>.md` for the last developer's state. The canonical project context lives in `.huddleup/charter.md`.

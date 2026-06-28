@@ -12,9 +12,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Open VSX publish so the extension installs in Cursor, VSCodium, and Windsurf.
 - Inline diff preview of the captured snapshot.
-- Quick-pick command palette for thread resume (no sidebar click required).
+- "Show last snapshot" command that opens the most recent thread file in the editor.
+
+---
+
+## [0.1.2] — 2026-06-29
+
+Security + reliability pass aligned with the CLI 0.1.2 release.
+
+### Fixed
+- **[Security] Shell-injection in `runHuddleup`** — thread names from the webview were interpolated into `execSync` command strings. Replaced with `spawnSync(cmd, args, { shell: false })` and an explicit whitelist (`/^[\w.\- ]{1,200}$/`) for thread names received via webview messages and the quick-pick.
+
+### Changed
+- **Sidebar reads `huddleup thread list --json`** instead of regex-parsing terminal text — future CLI-formatting changes won't break the panel.
+- **Quick-pick "Resume a thread"** now shows status and the last snapshot note alongside the name.
+- HTML thread names are HTML-escaped before rendering — prevents a crafted thread title from injecting markup into the webview.
+- User-facing messages and buttons are emoji-free (matches the project's `CONTRIBUTING.md` rule).
+- Removed the unused `updatePanel()` indirection.
+
+### Packaged
+- `vscode-huddleup-0.1.2.vsix` (18 files, ~130 KB) with the new README, CHANGELOG, and hardened code.
 
 ---
 
@@ -61,6 +79,7 @@ First public release. Packaged as `vscode-huddleup-0.1.0.vsix`.
 
 ---
 
-[Unreleased]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.0

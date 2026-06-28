@@ -1,22 +1,25 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
-import { Adapter, AdapterResult, registerAdapter } from './base.js';
+import { Adapter, AdapterResult, registerAdapter, extractFilePaths } from './base.js';
+import { warning } from '../utils/logger.js';
 
-// Windsurf (Codeium) stores sessions in various locations
-const POSSIBLE_PATHS = [
-  join(process.env.APPDATA || join(homedir(), 'AppData', 'Roaming'), 'Windsurf'),
-  join(process.env.LOCALAPPDATA || join(homedir(), 'AppData', 'Local'), 'Windsurf'),
-  join(homedir(), '.windsurf'),
-  // VS Code extensions storage if Windsurf uses it
-  join(process.env.APPDATA || join(homedir(), 'AppData', 'Roaming'), 'Windsurf', 'User', 'globalStorage'),
-  join(homedir(), '.codeium'),
-  join(process.env.APPDATA || join(homedir(), 'AppData', 'Roaming'), 'Codeium'),
-];
+function candidateRoots(): string[] {
+  const home = homedir();
+  return [
+    join(home, '.windsurf'),
+    join(home, '.codeium'),
+    join(home, 'Library', 'Application Support', 'Windsurf'),
+    join(home, '.config', 'Windsurf'),
+    join(process.env.APPDATA || join(home, 'AppData', 'Roaming'), 'Windsurf'),
+    join(process.env.LOCALAPPDATA || join(home, 'AppData', 'Local'), 'Windsurf'),
+    join(process.env.APPDATA || join(home, 'AppData', 'Roaming'), 'Codeium'),
+  ];
+}
 
-function findWindsurfSessionDir(): string | null {
-  for (const p of POSSIBLE_PATHS) {
-    if (existsSync(p)) return p;
+function pickRoot(): string | null {
+  for (const r of candidateRoots()) {
+    if (existsSync(r)) return r;
   }
   return null;
 }
@@ -39,10 +42,10 @@ function findChatHistoryFiles(dir: string): string[] {
 export const windsurfAdapter: Adapter = {
   name: 'windsurf',
   detect(): boolean {
-    return findWindsurfSessionDir() !== null;
+    return pickRoot() !== null;
   },
   async capture(): Promise<AdapterResult> {
-    const dir = findWindsurfSessionDir();
+    const dir = pickRoot();
     const messages: string[] = [];
 
     if (dir) {
@@ -53,23 +56,24 @@ export const windsurfAdapter: Adapter = {
           const lines = content.trim().split('\n').slice(-50);
           for (const line of lines) {
             try {
-              const parsed = JSON.parse(line);
-              const text = parsed.text || parsed.content || parsed.message || parsed.response || parsed.query || '';
+              const parsed = JSON.parse(line) as Record<string, unknown>;
+              const text = (parsed.text ?? parsed.content ?? parsed.message ?? parsed.response ?? parsed.query ?? '') as unknown;
               if (text) messages.push(typeof text === 'string' ? text.slice(0, 500) : JSON.stringify(text).slice(0, 500));
             } catch {
               if (line.trim()) messages.push(line.slice(0, 500));
             }
           }
-        } catch {
-          // couldn't read windsurf session
+        } catch (err) {
+          warning(`windsurf adapter could not read session: ${(err as Error).message}`);
         }
       }
     }
 
+    const reversed = messages.reverse();
     return {
       name: 'windsurf',
-      openFiles: [],
-      lastMessages: messages.reverse(),
+      openFiles: extractFilePaths(reversed),
+      lastMessages: reversed,
       rawSessionPath: dir || undefined,
     };
   },

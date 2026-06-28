@@ -112,16 +112,18 @@ Rules:
 
 ## 4. Existing adapters
 
-| Adapter | File | Detection | Status |
+| Adapter | File | Detection paths checked | Status |
 |---|---|---|---|
-| **Claude Code** | [`claude-code.ts`](../src/adapters/claude-code.ts) | `~/.claude/sessions/*.jsonl` | ✅ Production |
-| **Cursor** | [`cursor.ts`](../src/adapters/cursor.ts) | `.cursor/sessions/*.jsonl` (project-local) | ✅ Production |
-| **GitHub Copilot** | [`copilot.ts`](../src/adapters/copilot.ts) | VS Code global storage `github.copilot-chat/`, `~/.github/copilot/` | ✅ Production |
-| **Codex** | [`codex.ts`](../src/adapters/codex.ts) | `~/.codex/`, `%APPDATA%/Codex/`, `%LOCALAPPDATA%/Codex/` | ✅ Production |
-| **Windsurf** | [`windsurf.ts`](../src/adapters/windsurf.ts) | `%APPDATA%/Windsurf/`, `~/.windsurf/`, `~/.codeium/` | ✅ Production |
-| **Generic** | [`generic.ts`](../src/adapters/generic.ts) | Always returns `true` — fallback that ensures `AGENTS.md` is written | ✅ Production |
+| **Claude Code** | [`claude-code.ts`](../src/adapters/claude-code.ts) | `~/.claude/projects/<hash>/*.jsonl` (modern), `~/.claude/sessions/*.jsonl` (legacy) | Production |
+| **Cursor** | [`cursor.ts`](../src/adapters/cursor.ts) | `~/.cursor/{sessions,chats}/`, `~/Library/Application Support/Cursor/User/workspaceStorage/`, `~/.config/Cursor/User/workspaceStorage/`, `%APPDATA%/Cursor/User/workspaceStorage/`, `%LOCALAPPDATA%/Cursor/User/workspaceStorage/` | Production |
+| **GitHub Copilot** | [`copilot.ts`](../src/adapters/copilot.ts) | VS Code global storage (`github.copilot-chat`) for Code, Code Insiders, and Cursor across macOS / Linux / Windows; `~/.github/copilot/`; `~/.copilot/`; `~/.vscode/copilot/` | Production |
+| **Codex** | [`codex.ts`](../src/adapters/codex.ts) | `~/.codex/`, `~/Library/Application Support/Codex/`, `~/.config/Codex/`, `%APPDATA%/Codex/`, `%LOCALAPPDATA%/Codex/` | Production |
+| **Windsurf** | [`windsurf.ts`](../src/adapters/windsurf.ts) | `~/.windsurf/`, `~/.codeium/`, `~/Library/Application Support/Windsurf/`, `~/.config/Windsurf/`, `%APPDATA%/{Windsurf,Codeium}/`, `%LOCALAPPDATA%/Windsurf/` | Production |
+| **Generic** | [`generic.ts`](../src/adapters/generic.ts) | Always detects (fallback that ensures `AGENTS.md` exists even when no specific tool is installed) | Production |
 
 Every adapter is **read-only** with respect to the AI tool's own data. We never write into the tool's session directory.
+
+**Multiple adapters can match.** `huddleup snapshot` uses `detectAllAdapters()` and merges `lastMessages` and `openFiles` from every detected tool into a single snapshot. The thread's `Tools:` field lists all contributors.
 
 ---
 

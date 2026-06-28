@@ -1,68 +1,97 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
-import { Adapter, AdapterResult, registerAdapter } from './base.js';
+import { Adapter, AdapterResult, registerAdapter, extractFilePaths } from './base.js';
+import { warning } from '../utils/logger.js';
 
-// Cursor stores chat history in various locations depending on version
-const POSSIBLE_PATHS = [
-  join(homedir(), '.cursor', 'sessions'),
-  join(homedir(), '.cursor', 'chats'),
-  join(process.env.LOCALAPPDATA || '', 'Cursor', 'User', 'workspaceStorage'),
-];
+/**
+ * Cursor stores chat history differently across versions and OSes:
+ *   - macOS:   ~/Library/Application Support/Cursor/User/workspaceStorage
+ *   - Windows: %APPDATA%\Cursor\User\workspaceStorage  (or %LOCALAPPDATA%)
+ *   - Linux:   ~/.config/Cursor/User/workspaceStorage
+ *   - Legacy:  ~/.cursor/{sessions,chats}/
+ */
+function candidateRoots(): string[] {
+  const home = homedir();
+  return [
+    join(home, '.cursor', 'sessions'),
+    join(home, '.cursor', 'chats'),
+    join(home, 'Library', 'Application Support', 'Cursor', 'User', 'workspaceStorage'),
+    join(home, '.config', 'Cursor', 'User', 'workspaceStorage'),
+    join(process.env.APPDATA || join(home, 'AppData', 'Roaming'), 'Cursor', 'User', 'workspaceStorage'),
+    join(process.env.LOCALAPPDATA || join(home, 'AppData', 'Local'), 'Cursor', 'User', 'workspaceStorage'),
+  ];
+}
 
-function findCursorSessionDir(): string | null {
-  for (const p of POSSIBLE_PATHS) {
-    if (existsSync(p)) return p;
+function pickRoot(): string | null {
+  for (const r of candidateRoots()) {
+    if (existsSync(r)) return r;
   }
   return null;
+}
+
+function findLatestChat(root: string): string | null {
+  let latest: { path: string; mtime: number } | null = null;
+  const walk = (dir: string, depth: number) => {
+    if (depth > 2) return;
+    let entries: string[];
+    try { entries = readdirSync(dir); } catch { return; }
+    for (const name of entries) {
+      const full = join(dir, name);
+      let stat;
+      try { stat = statSync(full); } catch { continue; }
+      if (stat.isDirectory()) {
+        walk(full, depth + 1);
+      } else if (name.endsWith('.jsonl') || name.endsWith('.json') || name.endsWith('.ndjson')) {
+        if (!latest || stat.mtimeMs > latest.mtime) {
+          latest = { path: full, mtime: stat.mtimeMs };
+        }
+      }
+    }
+  };
+  walk(root, 0);
+  return latest ? (latest as { path: string; mtime: number }).path : null;
 }
 
 export const cursorAdapter: Adapter = {
   name: 'cursor',
   detect(): boolean {
-    return findCursorSessionDir() !== null;
+    return pickRoot() !== null;
   },
   async capture(): Promise<AdapterResult> {
-    const dir = findCursorSessionDir();
+    const root = pickRoot();
     const messages: string[] = [];
+    let rawPath: string | undefined;
 
-    if (dir) {
-      try {
-        const files = readdirSync(dir)
-          .filter(f => f.endsWith('.json') || f.endsWith('.jsonl'))
-          .map(f => ({ name: f, time: statSync(join(dir, f)).mtimeMs }))
-          .sort((a, b) => b.time - a.time);
-
-        if (files.length > 0) {
-          const latest = join(dir, files[0].name);
-          const content = readFileSync(latest, 'utf-8');
+    if (root) {
+      const chat = findLatestChat(root);
+      rawPath = chat || root;
+      if (chat) {
+        try {
+          const content = readFileSync(chat, 'utf-8');
           const lines = content.trim().split('\n').slice(-50);
           for (const line of lines) {
             try {
-              const parsed = JSON.parse(line);
-              const text = parsed.text || parsed.content || parsed.message || '';
+              const parsed = JSON.parse(line) as Record<string, unknown>;
+              const text = (parsed.text ?? parsed.content ?? parsed.message ?? '') as unknown;
               if (text) messages.push(typeof text === 'string' ? text.slice(0, 500) : JSON.stringify(text).slice(0, 500));
             } catch {
-              messages.push(line.slice(0, 500));
+              if (line.trim()) messages.push(line.slice(0, 500));
             }
           }
+        } catch (err) {
+          warning(`cursor adapter could not read session: ${(err as Error).message}`);
         }
-      } catch {
-        // couldn't read cursor data
       }
     }
 
+    const reversed = messages.reverse();
     return {
       name: 'cursor',
-      openFiles: [],
-      lastMessages: messages.reverse(),
-      rawSessionPath: dir || undefined,
+      openFiles: extractFilePaths(reversed),
+      lastMessages: reversed,
+      rawSessionPath: rawPath,
     };
-  },
-  async inject(context: string): Promise<void> {
-    // Cursor uses .cursor/rules/huddleup.mdc for context injection
-    // The context is written there by the `resume` command via its template
-    console.log(context);
   },
 };
 

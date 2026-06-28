@@ -1,0 +1,17 @@
+# Normalize line endings to LF in the repo regardless of OS checkout.
+* text=auto eol=lf
+
+# Binary assets — leave alone.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.gif binary
+*.webp binary
+*.vsix binary
+
+# GitHub language stats — exclude generated and vendored stuff.
+dist/                 linguist-generated=true
+landing/dist/         linguist-generated=true
+vscode-huddleup/dist/ linguist-generated=true
+package-lock.json     linguist-generated=true

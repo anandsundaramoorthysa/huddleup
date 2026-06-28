@@ -1,0 +1,11 @@
+# Default owner for everything in this repository.
+*       @anandsundaramoorthysa
+
+# CI/CD changes need owner review.
+/.github/                 @anandsundaramoorthysa
+
+# Release-affecting files.
+/package.json             @anandsundaramoorthysa
+/vscode-huddleup/package.json @anandsundaramoorthysa
+/CHANGELOG.md             @anandsundaramoorthysa
+/vscode-huddleup/CHANGELOG.md @anandsundaramoorthysa

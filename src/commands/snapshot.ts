@@ -3,10 +3,15 @@ import { listThreads, createThread } from '../core/thread.js';
 import { promptSnapshot, SnapshotAnswers } from '../prompts/snapshot-prompts.js';
 import { colors } from '../utils/colors.js';
 import * as logger from '../utils/logger.js';
-import { detectAdapter } from '../adapters/base.js';
+import { detectAllAdapters } from '../adapters/base.js';
 
-export async function snapshot(options?: { note?: string; thread?: string }): Promise<void> {
-  logger.header('HuddleUp — Snapshot');
+export async function snapshot(options?: { note?: string; thread?: string; verbose?: boolean }): Promise<void> {
+  logger.header('HuddleUp - Snapshot');
+
+  if (options?.verbose) {
+    const adapters = detectAllAdapters();
+    logger.info(`Adapters detected: ${adapters.map((a) => a.name).join(', ') || 'none'}`);
+  }
 
   let answers: SnapshotAnswers;
 
@@ -19,7 +24,7 @@ export async function snapshot(options?: { note?: string; thread?: string }): Pr
     };
   } else {
     const threads = listThreads();
-    answers = await promptSnapshot(threads.map(t => t.name));
+    answers = await promptSnapshot(threads.map((t) => t.title));
 
     if (answers.createNew && answers.newThreadName) {
       createThread(answers.newThreadName, process.env.USER || process.env.USERNAME || 'unknown');
@@ -39,15 +44,14 @@ export async function snapshot(options?: { note?: string; thread?: string }): Pr
   logger.divider();
   logger.success(`Snapshot saved to threads/${answers.thread}.md`);
   logger.info(`Author: ${data.author}`);
-  logger.info(`Tool: ${data.tool}`);
+  logger.info(`Tools: ${data.tools.join(', ')}`);
   logger.info(`Branch: ${data.branch}`);
   logger.info(`Files changed: ${data.filesChanged.length}`);
+  logger.info(`Open files (inferred): ${data.openFiles.length}`);
   logger.info(`AI messages captured: ${data.lastMessages.length}`);
 
   if (data.warnings.length > 0) {
-    for (const w of data.warnings) {
-      logger.warning(w);
-    }
+    for (const w of data.warnings) logger.warning(w);
   }
 
   logger.info(colors.dim('\nYour teammate can now run:'));

@@ -1,34 +1,36 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
-import { Adapter, AdapterResult, registerAdapter } from './base.js';
+import { Adapter, AdapterResult, registerAdapter, extractFilePaths } from './base.js';
+import { warning } from '../utils/logger.js';
 
-// Copilot chat history locations across editors and OS
-const POSSIBLE_PATHS = [
-  // VS Code global storage
-  join(process.env.APPDATA || join(homedir(), 'AppData', 'Roaming'), 'Code', 'User', 'globalStorage', 'github.copilot-chat'),
-  join(process.env.APPDATA || join(homedir(), 'AppData', 'Roaming'), 'Code - Insiders', 'User', 'globalStorage', 'github.copilot-chat'),
-  join(process.env.APPDATA || join(homedir(), 'AppData', 'Roaming'), 'Cursor', 'User', 'globalStorage', 'github.copilot-chat'),
-  // Generic copilot data dirs
-  join(homedir(), '.github', 'copilot'),
-  join(homedir(), '.copilot'),
-  // Linux/macOS VS Code
-  join(homedir(), '.config', 'Code', 'User', 'globalStorage', 'github.copilot-chat'),
-  join(homedir(), '.vscode', 'copilot'),
-];
+function candidateRoots(): string[] {
+  const home = homedir();
+  return [
+    join(process.env.APPDATA || join(home, 'AppData', 'Roaming'), 'Code', 'User', 'globalStorage', 'github.copilot-chat'),
+    join(process.env.APPDATA || join(home, 'AppData', 'Roaming'), 'Code - Insiders', 'User', 'globalStorage', 'github.copilot-chat'),
+    join(process.env.APPDATA || join(home, 'AppData', 'Roaming'), 'Cursor', 'User', 'globalStorage', 'github.copilot-chat'),
+    join(home, 'Library', 'Application Support', 'Code', 'User', 'globalStorage', 'github.copilot-chat'),
+    join(home, 'Library', 'Application Support', 'Code - Insiders', 'User', 'globalStorage', 'github.copilot-chat'),
+    join(home, '.config', 'Code', 'User', 'globalStorage', 'github.copilot-chat'),
+    join(home, '.github', 'copilot'),
+    join(home, '.copilot'),
+    join(home, '.vscode', 'copilot'),
+  ];
+}
 
-function findCopilotSessionDir(): string | null {
-  for (const p of POSSIBLE_PATHS) {
-    if (existsSync(p)) return p;
+function pickRoot(): string | null {
+  for (const r of candidateRoots()) {
+    if (existsSync(r)) return r;
   }
   return null;
 }
 
-function findLatestChatFile(dir: string): string | null {
+function findLatestChat(dir: string): string | null {
   try {
     const files = readdirSync(dir)
-      .filter(f => f.endsWith('.json') || f.endsWith('.jsonl') || f.endsWith('.ndjson'))
-      .map(f => ({ name: f, time: statSync(join(dir, f)).mtimeMs }))
+      .filter((f) => f.endsWith('.json') || f.endsWith('.jsonl') || f.endsWith('.ndjson'))
+      .map((f) => ({ name: f, time: statSync(join(dir, f)).mtimeMs }))
       .sort((a, b) => b.time - a.time);
     return files.length > 0 ? join(dir, files[0].name) : null;
   } catch {
@@ -39,37 +41,38 @@ function findLatestChatFile(dir: string): string | null {
 export const copilotAdapter: Adapter = {
   name: 'copilot',
   detect(): boolean {
-    return findCopilotSessionDir() !== null;
+    return pickRoot() !== null;
   },
   async capture(): Promise<AdapterResult> {
-    const dir = findCopilotSessionDir();
+    const dir = pickRoot();
     const messages: string[] = [];
 
     if (dir) {
-      const chatFile = findLatestChatFile(dir);
-      if (chatFile) {
+      const chat = findLatestChat(dir);
+      if (chat) {
         try {
-          const content = readFileSync(chatFile, 'utf-8');
+          const content = readFileSync(chat, 'utf-8');
           const lines = content.trim().split('\n').slice(-50);
           for (const line of lines) {
             try {
-              const parsed = JSON.parse(line);
-              const text = parsed.text || parsed.content || parsed.message || parsed.assistantMessage || parsed.userMessage || '';
+              const parsed = JSON.parse(line) as Record<string, unknown>;
+              const text = (parsed.text ?? parsed.content ?? parsed.message ?? parsed.assistantMessage ?? parsed.userMessage ?? '') as unknown;
               if (text) messages.push(typeof text === 'string' ? text.slice(0, 500) : JSON.stringify(text).slice(0, 500));
             } catch {
               if (line.trim()) messages.push(line.slice(0, 500));
             }
           }
-        } catch {
-          // couldn't read copilot chat
+        } catch (err) {
+          warning(`copilot adapter could not read chat: ${(err as Error).message}`);
         }
       }
     }
 
+    const reversed = messages.reverse();
     return {
       name: 'copilot',
-      openFiles: [],
-      lastMessages: messages.reverse(),
+      openFiles: extractFilePaths(reversed),
+      lastMessages: reversed,
       rawSessionPath: dir || undefined,
     };
   },

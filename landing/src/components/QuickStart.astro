@@ -5,23 +5,29 @@ import { SITE } from '../config';
 <section class="section section-alt" id="quick-start">
   <div class="container">
     <span class="section-label">Quick start</span>
-    <h2 class="section-title">Try it in 10 seconds</h2>
-    <p class="section-desc">No sign-up, no account, no config file. Just Node.js and a terminal.</p>
+    <h2 class="section-title">Three commands to your first handoff</h2>
+    <p class="section-desc">No sign-up, no account, no backend. Just Node.js, git, and a terminal.</p>
 
     <div class="quickstart-card">
-      <pre class="code-block quickstart-code"><code><span class="comment"># Install globally</span>
+      <pre class="code-block quickstart-code"><code><span class="comment"># 1. Install the CLI</span>
 <span class="prompt">$ </span>npm install -g huddleup
 
-<span class="comment"># Snapshot your current AI session</span>
-<span class="prompt">$ </span>huddleup snapshot
-<span class="comment">→ Created session.huddleup.jsonl (3 files, 42 messages, 1 git diff)</span>
+<span class="comment"># 2. Set up HuddleUp in your project (creates .huddleup/ + CLAUDE.md, .cursor/rules/huddleup.mdc, AGENTS.md, .windsurfrules)</span>
+<span class="prompt">$ </span>cd your-project
+<span class="prompt">$ </span>huddleup init
+<span class="comment">→ HuddleUp is ready! Edit .huddleup/charter.md and run "huddleup sync".</span>
 
-<span class="comment"># Resume on another machine</span>
-<span class="prompt">$ </span>huddleup resume session.huddleup.jsonl
-<span class="comment">→ Restored 3 files, stashed working tree, replayed 42 messages</span></code></pre>
+<span class="comment"># 3. Save your AI session before a break</span>
+<span class="prompt">$ </span>huddleup snapshot
+<span class="comment">? Where did you leave it? Streaming /chat broken, suspect CORS</span>
+<span class="comment">→ Snapshot saved to threads/streaming-chat-endpoint.md</span>
+
+<span class="comment"># 4. Your teammate picks up - in whichever AI tool they use</span>
+<span class="prompt">$ </span>huddleup resume streaming-chat-endpoint
+<span class="comment">→ YOU ARE HERE briefing prints, relevant files open, AI tool gets full context</span></code></pre>
 
       <div class="quickstart-footnote">
-        <p>Distributed via <a href="https://www.npmjs.com/package/huddleup" target="_blank">npm</a> • Open source on <a href={SITE.repo} target="_blank">GitHub</a> • AGPL-3.0 licensed</p>
+        <p>Distributed via <a href="https://www.npmjs.com/package/huddleup" target="_blank" rel="noopener">npm</a> &middot; Open source on <a href={SITE.repo} target="_blank" rel="noopener">GitHub</a> &middot; AGPL-3.0 licensed</p>
       </div>
     </div>
   </div>
@@ -29,9 +35,9 @@ import { SITE } from '../config';
 
 <style>
   .quickstart-card{
-    max-width:720px;
+    max-width:760px;
     margin:40px auto 0;
   }
-  .quickstart-code{font-size:clamp(12px,1.5vw,14px);padding:20px 24px;border-radius:var(--radius)}
+  .quickstart-code{font-size:clamp(12px,1.4vw,14px);padding:20px 24px;border-radius:var(--radius);overflow-x:auto}
   .quickstart-footnote{text-align:center;margin-top:16px;font-size:14px;color:var(--subtle)}
 </style>

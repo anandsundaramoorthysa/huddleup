@@ -8,22 +8,42 @@ export interface Charter {
   raw: string;
 }
 
+/**
+ * Section heading synonyms — users may write `## Stack` or `## Tech Stack`,
+ * `## Conventions` or `## Style`, etc. Both should parse the same.
+ */
+const SYNONYMS: Record<keyof Omit<Charter, 'raw'>, string[]> = {
+  projectName: ['Project Name', 'Project', 'Name'],
+  stack: ['Tech Stack', 'Stack', 'Technology', 'Tech'],
+  conventions: ['Conventions', 'Style', 'How we work', 'Code style'],
+  team: ['Team', 'Team members', 'People'],
+};
+
 export function readCharter(): Charter | null {
   const path = huddleupPath('charter.md');
   if (!fileExists(path)) return null;
   const raw = readFile(path);
   return {
-    projectName: extractSection(raw, 'Project Name'),
-    stack: extractSection(raw, 'Tech Stack'),
-    conventions: extractSection(raw, 'Conventions'),
-    team: extractSection(raw, 'Team'),
+    projectName: extractAny(raw, SYNONYMS.projectName),
+    stack: extractAny(raw, SYNONYMS.stack),
+    conventions: extractAny(raw, SYNONYMS.conventions),
+    team: extractAny(raw, SYNONYMS.team),
     raw,
   };
 }
 
+function extractAny(content: string, titles: string[]): string {
+  for (const title of titles) {
+    const section = extractSection(content, title);
+    if (section) return section;
+  }
+  return '';
+}
+
 function extractSection(content: string, title: string): string {
-  const re = new RegExp(`##\\s*${title}[\\s\\S]*?(?=\\n##|$)`, 'i');
+  // Escape regex special chars in the title.
+  const safeTitle = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`##\\s+${safeTitle}\\s*\\n([\\s\\S]*?)(?=\\n##\\s|\\n---|$)`, 'i');
   const match = content.match(re);
-  if (!match) return '';
-  return match[0].split('\n').slice(1).join('\n').trim();
+  return match ? match[1].trim() : '';
 }

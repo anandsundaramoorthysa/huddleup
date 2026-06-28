@@ -15,9 +15,9 @@ export async function promptSnapshot(existingThreads: string[]): Promise<Snapsho
       name: 'action',
       message: 'Which thread does this snapshot belong to?',
       choices: [
-        ...existingThreads.map(t => ({ name: t, value: t })),
+        ...existingThreads.map((t) => ({ name: t, value: t })),
         new inquirer.Separator(),
-        { name: '✨ Create new thread', value: '__new__' },
+        { name: '+ Create new thread', value: '__new__' },
       ],
     },
   ]);
@@ -60,7 +60,7 @@ export async function promptSnapshot(existingThreads: string[]): Promise<Snapsho
   return {
     note,
     thread,
-    warnings: warnings ? warnings.split(',').map(w => w.trim()).filter(Boolean) : [],
+    warnings: warnings ? warnings.split(',').map((w) => w.trim()).filter(Boolean) : [],
     createNew,
     newThreadName,
   };

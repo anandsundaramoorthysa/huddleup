@@ -18,6 +18,6 @@ export async function archive(name: string): Promise<void> {
     author,
   });
 
-  logger.success(`Thread "${name}" archived.`);
+  logger.success(`Thread "${name}" archived (moved to .huddleup/threads/_archive/).`);
   logger.info('Run "huddleup sync" to update AI tool files.');
 }

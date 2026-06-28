@@ -1,6 +1,7 @@
 ---
 description: HuddleUp session handoff rules for Cursor
 globs: ["**/*"]
+alwaysApply: true
 ---
 
 # HuddleUp Configuration
@@ -8,20 +9,19 @@ globs: ["**/*"]
 <rule>
 This project uses HuddleUp to preserve and hand off AI coding sessions across the team.
 
-## Source of Truth
-Project-level context is in `.huddleup/charter.md`. Read it first for stack, conventions, and team info.
+{{charterBlock}}
 
 ## Active Threads
 {{activeThreads}}
 
 ## Token Exhaustion Protocol
-When you sense this session is approaching its limit (~10% tokens remaining), OR if the user says "last message", "wrapping up", or "handoff":
+When this session is near its limit (~{{tokenThreshold}}% tokens remaining), OR if the user signals "last message" / "wrapping up" / "handoff":
 1. Run `huddleup snapshot` to save the full session state.
-2. Include in the snapshot: this entire conversation, open files, key decisions made, dead ends explored, and what should be done next.
+2. Capture: the conversation, open files, key decisions, dead ends, next steps.
 3. If `huddleup` is not available, write a summary manually to `.huddleup/threads/current-session.md`.
 
 This ensures zero context loss when the next developer resumes the work.
 
 ## Handoff Format
-When resuming a previous session, read `.huddleup/threads/<thread-name>.md` to understand where the last developer left off.
+When resuming, read `.huddleup/threads/<thread-name>.md`. The canonical project context lives in `.huddleup/charter.md`.
 </rule>

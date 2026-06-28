@@ -7,11 +7,11 @@ import { threadNew, threadList, threadShow } from './commands/thread.js';
 import { standup } from './commands/standup.js';
 import { handoff } from './commands/handoff.js';
 import { archive } from './commands/archive.js';
-import { isHuddleupInit, huddleupPath } from './core/files.js';
+import { isHuddleupInit, getPackageVersion } from './core/files.js';
 
 function requireInit(): void {
   if (!isHuddleupInit()) {
-    console.error('✗ No .huddleup/ found. Run "huddleup init" first.');
+    console.error('No .huddleup/ found. Run "huddleup init" first.');
     process.exit(1);
   }
 }
@@ -21,8 +21,8 @@ export function createProgram(): Command {
 
   program
     .name('huddleup')
-    .description('Huddle up your team\'s AI coding sessions.')
-    .version('0.1.0');
+    .description("Huddle up your team's AI coding sessions.")
+    .version(getPackageVersion());
 
   program
     .command('init')
@@ -37,7 +37,8 @@ export function createProgram(): Command {
     .description('Save current work state to a thread')
     .option('-n, --note <note>', 'One-line summary (non-interactive)')
     .option('-t, --thread <thread>', 'Thread name (non-interactive)')
-    .action(async (options: { note?: string; thread?: string }) => {
+    .option('-v, --verbose', 'Print detected adapters and extra diagnostics')
+    .action(async (options: { note?: string; thread?: string; verbose?: boolean }) => {
       requireInit();
       await snapshot(options);
     });
@@ -75,9 +76,10 @@ export function createProgram(): Command {
   threadCmd
     .command('list')
     .description('List all active threads')
-    .action(async () => {
+    .option('--json', 'Output as JSON (for scripts and the VS Code extension)')
+    .action(async (options: { json?: boolean }) => {
       requireInit();
-      await threadList();
+      await threadList(options);
     });
 
   threadCmd
@@ -92,9 +94,11 @@ export function createProgram(): Command {
   program
     .command('standup')
     .description('Show team status from all threads')
-    .action(async () => {
+    .option('--json', 'Output as JSON')
+    .option('--days <n>', 'Number of past days to include in activity (default 1)', (v) => parseInt(v, 10))
+    .action(async (options: { json?: boolean; days?: number }) => {
       requireInit();
-      await standup();
+      await standup(options);
     });
 
   program

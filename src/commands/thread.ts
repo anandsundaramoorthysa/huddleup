@@ -13,16 +13,22 @@ export async function threadNew(name: string): Promise<void> {
   logger.info('Edit it directly, or start working and run "huddleup snapshot" to update it.');
 }
 
-export async function threadList(): Promise<void> {
-  logger.header('Active Threads');
+export async function threadList(options?: { json?: boolean }): Promise<void> {
   const threads = listThreads();
+
+  if (options?.json) {
+    process.stdout.write(JSON.stringify(threads, null, 2) + '\n');
+    return;
+  }
+
+  logger.header('Active Threads');
   if (threads.length === 0) {
     logger.info('No active threads. Run "huddleup thread new <name>" to create one.');
     return;
   }
   for (const t of threads) {
-    const statusIcon = t.status === 'blocked' ? '🔴' : t.status === 'done' ? '✅' : '🟡';
-    console.log(`  ${statusIcon}  ${colors.bold(t.name)}  ${colors.dim(`(${t.owner})`)}`);
+    const tag = `[${t.status}]`.padEnd(10);
+    console.log(`  ${colors.dim(tag)} ${colors.bold(t.title)}  ${colors.dim(`(${t.owner})`)}`);
   }
 }
 
@@ -32,8 +38,6 @@ export async function threadShow(name: string): Promise<void> {
     logger.error(`Thread "${name}" not found.`);
     return;
   }
-  console.log(`\n${colors.header(thread.meta.name)}\n`);
+  console.log(`\n${colors.header(thread.meta.title)}\n`);
   console.log(thread.content);
 }
-
-

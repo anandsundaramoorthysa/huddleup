@@ -314,7 +314,7 @@ If you find a security issue, **don't open a public issue** — email [sanand030
 | Tests (35 passing — 23 unit + 12 integration) | ✅ Shipped |
 | Documentation + community files (CHANGELOG, CONTRIBUTING, CoC, SECURITY) | ✅ Shipped |
 | Brand kit (SVG + PNG + ICO, brand guidelines) | ✅ Shipped |
-| VS Code extension (`.vsix` packaged) | ✅ Shipped — Marketplace listing live, Open VSX pending |
+| VS Code extension (`.vsix` packaged, hardened) | ✅ Shipped — Marketplace publish + Open VSX pending |
 | Landing site (Astro 5, Cloudflare Pages-ready) | ✅ Built — deploy pending |
 | npm publish + Show HN launch | 🟡 Imminent |
 | Hosted team dashboard (Phase 6) | 🔲 Gated until ≥500 stars or ≥50 installs |

@@ -165,43 +165,55 @@ This regenerates `CLAUDE.md`, `.cursor/rules/huddleup.mdc`, `AGENTS.md`, and `.w
 ```bash
 # Monday morning, Anand
 huddleup thread new "streaming-chat-endpoint"
-#  ↳ creates .huddleup/threads/streaming-chat-endpoint.md
-#  ↳ logs to .huddleup/history/2026-06-29.jsonl
+#   Thread "streaming-chat-endpoint" created at .huddleup/threads/streaming-chat-endpoint.md
+#   Edit it directly, or start working and run "huddleup snapshot" to update it.
 
 # ... work with Claude Code for 3 hours ...
 
 huddleup snapshot
-# ? Where did you left it?
-# > Streaming works for short responses but breaks on >2KB payloads.
-#   Suspect transform stream buffering. Try replacing through2 with a
-#   plain Transform next.
+# ? Which thread does this snapshot belong to? streaming-chat-endpoint
+# ? Where did you leave it? Streaming works for short responses but breaks
+#   on >2KB payloads. Suspect transform stream buffering.
+# ? Any warnings for the next person? (leave blank)
+#
+#   Snapshot saved to threads/streaming-chat-endpoint.md
+#   Author: anand
+#   Tools:  claude-code
+#   Branch: master
+#   Files changed: 3
+#   AI messages captured: 47
 
 # ... walks away ...
 
 # Tuesday morning, Priya (different machine, different AI tool)
 git pull
 huddleup standup
-#   IN PROGRESS (1)
-#     streaming-chat-endpoint   anand   yesterday   "Streaming works for short …"
-#   DONE TODAY (0)
+#   HuddleUp - Standup
+#
+#   Active Threads:
+#     [active]   streaming-chat-endpoint (anand) (2026-06-29) - "Streaming works for short responses..."
+#
+#   Activity (last 1 day):
+#     22:47  [snapshot]  streaming-chat-endpoint - Streaming works for short responses...
 
 huddleup resume streaming-chat-endpoint
-# ──────────────────────────────────────────
-#   YOU ARE HERE  ·  streaming-chat-endpoint
-# ──────────────────────────────────────────
-#   Last touched by: anand · 14h ago
-#   Last note: Streaming works for short responses but breaks on …
+#   ══════════════════════════════════════════
+#     YOU ARE HERE
+#     Thread: streaming-chat-endpoint
+#     Owner:  anand
+#     Status: active
+#     Last update: 2026-06-29 22:47:00
+#     Last note: "Streaming works for short responses..."
+#   ══════════════════════════════════════════
 #
-#   Files reopened:
+#   Opening relevant files:
 #     src/routes/chat.ts
 #     src/lib/stream.ts
-#     tests/routes/chat.test.ts
 #
-#   Last 5 AI exchanges replayed into your Cursor session.
-# ──────────────────────────────────────────
-
-# Cursor's next reply already knows the through2 hypothesis. No re-explanation.
+#   Context written to .huddleup/resume-context.md
 ```
+
+Cursor's next reply already knows the buffering hypothesis. No re-explanation needed.
 
 ---
 
@@ -223,13 +235,15 @@ huddleup handoff priya
 # = snapshot + git add .huddleup/ + git commit + git push
 ```
 
-`handoff` can also fire a webhook (Slack / Discord / email) — set the URL in `.huddleup/config.json`:
+`handoff` can also fire a webhook (Slack / Discord / generic JSON receiver) — set the URL in `.huddleup/config.json`:
 
 ```json
 {
   "handoffWebhook": "https://hooks.slack.com/services/T.../B.../..."
 }
 ```
+
+When `handoffWebhook` is set and you run `huddleup handoff <teammate>`, HuddleUp POSTs a JSON body with `type`, `from`, `to`, `thread`, `note`, `tools`, `branch`, and `timestamp`. Slack accepts this shape natively; for Discord wrap it in `{ "content": "..." }` via a proxy if you need rich formatting.
 
 ---
 
@@ -249,6 +263,8 @@ You can change the threshold in `.huddleup/config.json`:
 }
 ```
 
+Run `huddleup sync` after editing — the threshold is templated into the generated `CLAUDE.md`, `.cursor/rules/huddleup.mdc`, `AGENTS.md`, and `.windsurfrules` so every AI tool sees the same value.
+
 ---
 
 ## 8. Non-interactive / CI usage
@@ -261,13 +277,19 @@ huddleup snapshot \
   --thread "streaming-chat-endpoint" \
   --note "Fixed buffering; coverage 91%."
 
+# Print which adapters HuddleUp detected on this machine
+huddleup snapshot --verbose --thread "X" --note "diagnostic"
+
 # Handoff non-interactively
 huddleup handoff priya \
   --thread "streaming-chat-endpoint" \
   --note "Ready for review."
 
-# List threads as JSON (for scripts)
+# List threads as JSON (for scripts / the VS Code extension)
 huddleup thread list --json
+
+# Standup as JSON, last 7 days of history
+huddleup standup --json --days 7
 ```
 
 ### Example: pre-push git hook that snapshots first

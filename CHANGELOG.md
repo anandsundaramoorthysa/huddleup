@@ -12,10 +12,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Open VSX publish so Cursor / VSCodium / Windsurf users can install the VS Code extension.
 - Demo screencast embedded in landing site + README.
 - Pre-commit hook (`husky` + `lint-staged`) so PRs don't ship typecheck regressions.
-- Slack webhook payload templates for `huddleup standup` and `huddleup handoff`.
+- More detailed `huddleup snapshot --verbose` output (parsed message roles, token estimates).
+
+---
+
+## [0.1.2] — 2026-06-29
+
+Quality + security pass after a full audit. **No breaking changes** — `huddleup snapshot`, `resume`, `init`, `sync`, `thread`, `standup`, `handoff`, `archive` all keep the same UX. Adapters keep the same on-disk layout. New CLI flags are additive.
+
+### Added
+- `huddleup snapshot --verbose` — prints detected adapters and diagnostics.
+- `huddleup thread list --json` and `huddleup standup --json` — structured output for scripts and the VS Code extension.
+- `huddleup standup --days <n>` — control the history window (default `1`).
+- **Webhook delivery for `huddleup handoff`** — set `handoffWebhook` in `.huddleup/config.json` to POST a JSON payload (Slack / Discord / generic webhook) when handing off to a specific teammate.
+- **Charter passthrough** — `huddleup init` and `huddleup sync` now inline your `.huddleup/charter.md` content into the generated `CLAUDE.md`, `.cursor/rules/huddleup.mdc`, `AGENTS.md`, `.windsurfrules`. The AI tool sees your actual stack and conventions without having to open a second file.
+- **Multi-adapter capture** — `huddleup snapshot` now captures messages from *every* detected AI tool, not just the first match. The thread's `Tools` field lists all contributors.
+- **Charter heading synonyms** — `## Stack` and `## Tech Stack` are both recognised. Same for `## Style` / `## Conventions`. Custom charter layouts no longer silently fail to parse.
+- **Open-file inference** — the new `extractFilePaths` helper pulls plausible repo-relative paths out of recent AI messages so `snapshot` and `resume` know which files to open.
+- **History `days` filter** — `readHistory(days)` finally honours its parameter. `huddleup standup` uses it.
+- `scripts/copy-templates.mjs` runs on every `npm run build` so `dist/templates/` always exists (no more fragile fallback to `src/templates/` at runtime).
+- New community files: `.editorconfig`, `.gitattributes`, `.eslintrc.cjs`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/CODEOWNERS`.
+- Eleven new unit + integration tests (44 total, up from 35) covering open-file extraction, charter synonyms, archive move semantics, history window, and version-from-package.json.
+
+### Changed
+- **`huddleup --version`** and the version written into `.huddleup/config.json` now read from the package's own `package.json` (`getPackageVersion()`) instead of a hardcoded string. No more drift between code and `package.json`.
+- **Generated AI-tool config files** carry the **configurable** Token Exhaustion threshold (`tokenExhaustionThresholdPercent`, default `10`). Was hardcoded to `10` in the templates.
+- **`huddleup standup` / `huddleup thread list`** show real `status`, `owner`, `updated`, and `lastNote` parsed from each thread's YAML frontmatter (previously every thread reported `active` / `unknown` / today's date).
+- **Adapters** now cover macOS, Linux, and Windows paths. Modern Claude Code (`~/.claude/projects/<hash>/*.jsonl`) is detected in addition to the legacy `~/.claude/sessions/`. Cursor on macOS (`~/Library/Application Support/Cursor/...`) and Linux (`~/.config/Cursor/...`) now detect.
+- **Snapshot block** now includes the short commit hash, the commit message, and the inferred open files (previously captured but silently dropped).
+- **Release workflow** (`.github/workflows/release.yml`) now runs typecheck + tests before `npm publish`, adds `permissions: contents: write` for the GitHub release, attaches the `.vsix` to the release, and (when `VSCE_PAT` / `OVSX_PAT` secrets are set) publishes the VS Code extension to both VS Code Marketplace and Open VSX in the same run.
+- **CLI output** is now emoji-free (per `CONTRIBUTING.md`). Status is shown as `[active]` / `[blocked]` / `[done]` text tags. Same in the VS Code extension's user-facing messages.
+- **Config keys aligned with docs**: `tokenExhaustionThresholdPercent`, `handoffWebhook`, `team` — matches the schema documented in `docs/getting-started.md`.
+- **VS Code extension** consumes `huddleup thread list --json` instead of regex-parsing terminal text, so future CLI-formatting changes won't break the sidebar.
+- Charter & thread reads now use the shared `slug()` helper in `src/core/files.ts`. Slug logic deduplicated across three call sites.
+- Vitest pool switched to `forks` so tests that legitimately need `process.chdir()` (charter / history / archive workdir setup) can run.
+
+### Fixed
+- **[Security] Shell-injection in `src/utils/editor.ts`** — file paths were passed through `execSync` with a shell. Replaced with `execFileSync(editor, [files])` (no shell, array args). A crafted thread file can no longer execute arbitrary commands when opened.
+- **[Security] Shell-injection in the VS Code extension** — thread names from webview messages flowed into `execSync` interpolated strings. Replaced with `spawnSync(cmd, args, { shell: false })` and a `validateInput` strict whitelist for thread names.
+- **[Cross-platform] `src/utils/editor.ts`** used `where` (Windows-only) to locate `code`/`cursor`. Now uses `command -v` on POSIX and `where` on Windows. File-open feature works on macOS and Linux.
+- **`huddleup archive <name>`** previously copied the thread to `_archive/` while leaving the original file in `threads/`, so archived threads never disappeared from `standup` and `thread list`. Archive now **moves**: writes the `status: done` copy to `_archive/`, then deletes the source.
+- Adapters no longer swallow IO errors silently — each emits a warning when its session file can't be parsed.
+- Tighter `extractFilePaths` regex stops version numbers (`1.0.1`), bare extensions, and `node_modules/` paths from being treated as "open files" in `resume`.
+- `huddleup resume` no longer relies on a `await import()` mid-function; all imports are hoisted.
+- `softprops/action-gh-release` upgraded from v1 to v2 (v1 ignores `generate_release_notes`).
+
+### Security
+- Hardened the CLI and the VS Code extension against the *"Arbitrary code execution via crafted `.huddleup/` files"* attack class explicitly listed as in-scope in `SECURITY.md`. See the two Fixed entries above.
 
 ---
 
@@ -108,9 +153,11 @@ The first public release of HuddleUp — CLI + VS Code extension + brand kit + l
 
 ## Release tags
 
+- [`v0.1.2`](https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.2)
 - [`v0.1.1`](https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.1)
 - [`v0.1.0`](https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.0)
 
-[Unreleased]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/anandsundaramoorthysa/huddleup/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/anandsundaramoorthysa/huddleup/releases/tag/v0.1.0

@@ -12,9 +12,6 @@ export const genericAdapter: Adapter = {
       lastMessages: [],
     };
   },
-  async inject(context: string): Promise<void> {
-    console.log(context);
-  },
 };
 
 registerAdapter(genericAdapter);
