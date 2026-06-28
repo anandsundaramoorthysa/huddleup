@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="HuddleUp" fill="currentColor">
+  <title>HuddleUp</title>
+  <g opacity="0.55">
+    <circle cx="192" cy="128" r="14"/>
+    <circle cx="160" cy="73" r="14"/>
+    <circle cx="96" cy="73" r="14"/>
+    <circle cx="64" cy="128" r="14"/>
+    <circle cx="96" cy="183" r="14"/>
+    <circle cx="160" cy="183" r="14"/>
+  </g>
+  <circle cx="128" cy="128" r="22"/>
+  <path d="M 192 128 L 160 73 L 96 73 L 64 128 L 96 183 L 160 183 Z"
+        stroke="currentColor" stroke-width="2" fill="none" opacity="0.25"/>
+</svg>

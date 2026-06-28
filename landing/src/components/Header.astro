@@ -1,0 +1,66 @@
+---
+import { NAV, SITE } from '../config';
+---
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="/" class="logo-link" aria-label="HuddleUp home">
+      <img src="/images/logo-horizontal.svg" alt="HuddleUp" width="160" height="36" class="logo-light" />
+      <img src="/images/logo-horizontal-dark.svg" alt="HuddleUp" width="160" height="36" class="logo-dark" />
+    </a>
+    <nav class="nav">
+      {NAV.map(item => (
+        <a href={item.href} class="nav-link">{item.label}</a>
+      ))}
+    </nav>
+    <a href={SITE.repo} class="btn btn-primary btn-small" target="_blank">GitHub</a>
+    <button class="menu-toggle" aria-label="Menu" id="menuToggle">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<style>
+  .header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+  }
+  .header-inner{
+    display:flex;
+    align-items:center;
+    gap:32px;
+    height:64px;
+  }
+  .logo-link{flex-shrink:0;line-height:0}
+  .logo-light{display:block}
+  .logo-dark{display:none}
+  .nav{display:flex;gap:4px;flex:1}
+  .nav-link{
+    padding:8px 14px;
+    border-radius:6px;
+    font-size:14px;
+    font-weight:500;
+    color:var(--muted);
+    transition:color .2s,background .2s;
+  }
+  .nav-link:hover{color:var(--ink);background:var(--bg-alt);text-decoration:none}
+  .btn-small{padding:8px 18px;font-size:13px;flex-shrink:0}
+  .menu-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:8px;margin-left:auto}
+  @media(max-width:768px){
+    .nav{display:none}
+    .nav.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:12px;gap:2px}
+    .menu-toggle{display:block}
+    .header .btn{display:none}
+  }
+</style>
+
+<script>
+  document.getElementById('menuToggle')?.addEventListener('click', () => {
+    document.querySelector('.nav')?.classList.toggle('open');
+  });
+</script>

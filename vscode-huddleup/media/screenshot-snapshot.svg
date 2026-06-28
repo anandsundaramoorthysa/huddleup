@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#1e1e1e" rx="8"/>
+  <rect x="0" y="0" width="600" height="36" fill="#2d2d2d" rx="8"/>
+  <circle cx="16" cy="18" r="6" fill="#ff5f57"/>
+  <circle cx="36" cy="18" r="6" fill="#ffbd2e"/>
+  <circle cx="56" cy="18" r="6" fill="#28c840"/>
+  <text x="300" y="24" font-family="system-ui" font-size="12" fill="#888" text-anchor="middle">bash</text>
+  <text x="16" y="70" font-family="monospace" font-size="13" fill="#6bc" fill-opacity="0">$ </text>
+  <text x="16" y="70" font-family="monospace" font-size="13" fill="#6bc">$ huddleup snapshot</text>
+  <text x="16" y="100" font-family="monospace" font-size="13" fill="#4ec9b0">📸 Captured: 47 AI messages, 3 files changed, 3 open files</text>
+  <text x="16" y="130" font-family="monospace" font-size="13" fill="#888">? Where did you leave it?</text>
+  <text x="16" y="160" font-family="monospace" font-size="13" fill="#ccc"> Streaming /chat broken, normal mode works, suspect CORS</text>
+  <text x="16" y="190" font-family="monospace" font-size="13" fill="#888">? Any warnings for the next person?</text>
+  <text x="16" y="220" font-family="monospace" font-size="13" fill="#ccc"> Don't retry WebSocket approach (failed)</text>
+  <text x="16" y="260" font-family="monospace" font-size="13" fill="#4ec9b0">✓ Saved to threads/streaming-chat-endpoint.md</text>
+  <text x="16" y="290" font-family="monospace" font-size="13" fill="#888">✓ Appended to history/2026-06-28.jsonl</text>
+  <text x="16" y="330" font-family="monospace" font-size="13" fill="#6bc">$ </text>
+</svg>

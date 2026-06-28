@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="HuddleUp">
+  <title>HuddleUp</title>
+  <!-- 6 outer dots in hexagonal arrangement (radius 64 from center) -->
+  <g fill="#6366F1" opacity="0.55">
+    <circle cx="192" cy="128" r="14"/>
+    <circle cx="160" cy="73" r="14"/>
+    <circle cx="96" cy="73" r="14"/>
+    <circle cx="64" cy="128" r="14"/>
+    <circle cx="96" cy="183" r="14"/>
+    <circle cx="160" cy="183" r="14"/>
+  </g>
+  <!-- Center dot (the huddle) -->
+  <circle cx="128" cy="128" r="22" fill="#6366F1"/>
+  <!-- Subtle hex outline connecting the dots -->
+  <path d="M 192 128 L 160 73 L 96 73 L 64 128 L 96 183 L 160 183 Z"
+        stroke="#6366F1" stroke-width="2" fill="none" opacity="0.25"/>
+</svg>

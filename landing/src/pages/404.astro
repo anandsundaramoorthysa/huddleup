@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found">
+  <main class="not-found">
+    <h1>404</h1>
+    <p>Page not found.</p>
+    <a href="/" class="btn btn-primary">Go home</a>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;gap:16px}
+  .not-found h1{font-size:5rem;font-weight:800;color:var(--indigo);line-height:1}
+  .not-found p{color:var(--muted);font-size:1.125rem}
+</style>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600">
+  <rect width="400" height="600" fill="#1e1e1e" rx="8"/>
+  <rect x="0" y="0" width="400" height="44" fill="#2d2d2d" rx="8"/>
+  <rect x="12" y="10" width="16" height="16" rx="4" fill="#6366F1"/>
+  <text x="36" y="24" font-family="system-ui" font-size="14" font-weight="600" fill="#e0e0e0">HuddleUp</text>
+  <rect x="0" y="52" width="400" height="548"/>
+  <rect x="12" y="64" width="376" height="40" rx="6" fill="#6366F1"/>
+  <text x="188" y="89" font-family="system-ui" font-size="13" fill="#fff" text-anchor="middle">📸 Snapshot</text>
+  <rect x="12" y="112" width="184" height="40" rx="6" fill="none" stroke="#555" stroke-width="1"/>
+  <text x="104" y="137" font-family="system-ui" font-size="13" fill="#ccc" text-anchor="middle">📋 Standup</text>
+  <rect x="204" y="112" width="184" height="40" rx="6" fill="none" stroke="#555" stroke-width="1"/>
+  <text x="296" y="137" font-family="system-ui" font-size="13" fill="#ccc" text-anchor="middle">✨ New Thread</text>
+  <text x="16" y="175" font-family="system-ui" font-size="11" font-weight="600" fill="#888">ACTIVE THREADS</text>
+  <rect x="12" y="188" width="376" height="44" rx="6" fill="#2a2a2a"/>
+  <circle cx="28" cy="210" r="5" fill="#eab308"/>
+  <text x="42" y="214" font-family="system-ui" font-size="13" fill="#e0e0e0">streaming-chat-endpoint</text>
+  <rect x="280" y="198" width="48" height="24" rx="4" fill="#6366F1"/>
+  <text x="304" y="213" font-family="system-ui" font-size="11" fill="#fff" text-anchor="middle">Resume</text>
+  <rect x="332" y="198" width="48" height="24" rx="4" fill="none" stroke="#555" stroke-width="1"/>
+  <text x="356" y="213" font-family="system-ui" font-size="11" fill="#aaa" text-anchor="middle">Archive</text>
+  <rect x="12" y="240" width="376" height="44" rx="6" fill="#2a2a2a"/>
+  <circle cx="28" cy="262" r="5" fill="#ef4444"/>
+  <text x="42" y="266" font-family="system-ui" font-size="13" fill="#e0e0e0">bug-empty-replies</text>
+  <rect x="280" y="250" width="48" height="24" rx="4" fill="#6366F1"/>
+  <text x="304" y="265" font-family="system-ui" font-size="11" fill="#fff" text-anchor="middle">Resume</text>
+  <rect x="332" y="250" width="48" height="24" rx="4" fill="none" stroke="#555" stroke-width="1"/>
+  <text x="356" y="265" font-family="system-ui" font-size="11" fill="#aaa" text-anchor="middle">Archive</text>
+  <rect x="12" y="292" width="376" height="44" rx="6" fill="#2a2a2a"/>
+  <circle cx="28" cy="314" r="5" fill="#22c55e"/>
+  <text x="42" y="318" font-family="system-ui" font-size="13" fill="#e0e0e0">add-dashboard</text>
+  <rect x="280" y="302" width="48" height="24" rx="4" fill="#6366F1"/>
+  <text x="304" y="317" font-family="system-ui" font-size="11" fill="#fff" text-anchor="middle">Resume</text>
+  <rect x="332" y="302" width="48" height="24" rx="4" fill="none" stroke="#555" stroke-width="1"/>
+  <text x="356" y="317" font-family="system-ui" font-size="11" fill="#aaa" text-anchor="middle">Archive</text>
+  <rect x="0" y="360" width="400" height="240" fill="#252526"/>
+  <rect x="12" y="372" width="376" height="216" rx="4" fill="#1e1e1e"/>
+  <text x="200" y="420" font-family="system-ui" font-size="12" fill="#888" text-anchor="middle">Output panel — run a command to see results</text>
+</svg>

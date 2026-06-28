@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 512">
+  <rect width="1024" height="512" fill="#EEF2FF"/>
+  <circle cx="512" cy="220" r="80" fill="none" stroke="#6366F1" stroke-width="4"/>
+  <circle cx="452" cy="160" r="28" fill="none" stroke="#6366F1" stroke-width="3"/>
+  <circle cx="572" cy="160" r="28" fill="none" stroke="#6366F1" stroke-width="3"/>
+  <circle cx="420" cy="220" r="28" fill="none" stroke="#6366F1" stroke-width="3"/>
+  <circle cx="604" cy="220" r="28" fill="none" stroke="#6366F1" stroke-width="3"/>
+  <circle cx="452" cy="280" r="28" fill="none" stroke="#6366F1" stroke-width="3"/>
+  <circle cx="572" cy="280" r="28" fill="none" stroke="#6366F1" stroke-width="3"/>
+  <circle cx="512" cy="220" r="12" fill="#6366F1"/>
+  <text x="512" y="370" font-family="system-ui, sans-serif" font-size="48" font-weight="700" fill="#0F172A" text-anchor="middle">HuddleUp</text>
+  <text x="512" y="410" font-family="system-ui, sans-serif" font-size="22" fill="#6366F1" text-anchor="middle">Huddle up your team's AI coding sessions</text>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="HuddleUp">
+  <title>HuddleUp</title>
+  <!-- Rounded square background for marketplace listing -->
+  <rect width="128" height="128" rx="24" fill="#EEF2FF"/>
+  <!-- Hex Huddle, scaled and centered -->
+  <g transform="translate(64, 64)">
+    <g fill="#6366F1" opacity="0.55">
+      <circle cx="35" cy="0" r="6.5"/>
+      <circle cx="17.5" cy="-30" r="6.5"/>
+      <circle cx="-17.5" cy="-30" r="6.5"/>
+      <circle cx="-35" cy="0" r="6.5"/>
+      <circle cx="-17.5" cy="30" r="6.5"/>
+      <circle cx="17.5" cy="30" r="6.5"/>
+    </g>
+    <circle cx="0" cy="0" r="10" fill="#6366F1"/>
+    <path d="M 35 0 L 17.5 -30 L -17.5 -30 L -35 0 L -17.5 30 L 17.5 30 Z"
+          stroke="#6366F1" stroke-width="1.2" fill="none" opacity="0.25"/>
+  </g>
+</svg>

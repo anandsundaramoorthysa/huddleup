@@ -1,0 +1,62 @@
+---
+import { SITE } from '../config';
+---
+
+<section class="hero">
+  <div class="container hero-content">
+    <h1 class="hero-title">
+      <span class="hero-wordmark"><span class="ink">Huddle</span><span class="indigo">Up</span></span>
+      <br />
+      <span class="hero-tagline">{SITE.tagline}</span>
+    </h1>
+    <p class="hero-desc">{SITE.description}</p>
+    <div class="hero-actions">
+      <a href="#quick-start" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+        Get started
+      </a>
+      <a href={SITE.repo} class="btn btn-outline" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        Star on GitHub
+      </a>
+    </div>
+    <div class="hero-screenshot screenshot-frame">
+      <img src="/images/screenshot-snapshot.png" alt="HuddleUp CLI taking a snapshot" loading="eager" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero{
+    padding:80px 0 0;
+    text-align:center;
+    overflow:hidden;
+  }
+  .hero-content{display:flex;flex-direction:column;align-items:center}
+  .hero-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;margin-bottom:16px}
+  .hero-wordmark{font-size:clamp(2.5rem,6vw,4.5rem)}
+  .hero-wordmark .ink{color:var(--ink)}
+  .hero-wordmark .indigo{color:var(--indigo)}
+  .hero-tagline{
+    display:block;
+    font-size:clamp(1rem,2.5vw,1.5rem);
+    font-weight:600;
+    color:var(--muted);
+    margin-top:8px;
+  }
+  .hero-desc{
+    font-size:clamp(1rem,2vw,1.2rem);
+    color:var(--muted);
+    max-width:640px;
+    line-height:1.7;
+    margin-bottom:32px;
+  }
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
+  .hero-screenshot{max-width:900px;width:100%}
+  .hero-screenshot img{width:100%;display:block}
+  @media(max-width:768px){
+    .hero{padding:40px 0 0}
+    .hero-actions{flex-direction:column;align-items:center}
+    .hero-actions .btn{width:100%;justify-content:center}
+  }
+</style>

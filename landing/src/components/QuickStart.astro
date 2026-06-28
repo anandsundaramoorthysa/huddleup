@@ -1,0 +1,37 @@
+---
+import { SITE } from '../config';
+---
+
+<section class="section section-alt" id="quick-start">
+  <div class="container">
+    <span class="section-label">Quick start</span>
+    <h2 class="section-title">Try it in 10 seconds</h2>
+    <p class="section-desc">No sign-up, no account, no config file. Just Node.js and a terminal.</p>
+
+    <div class="quickstart-card">
+      <pre class="code-block quickstart-code"><code><span class="comment"># Install globally</span>
+<span class="prompt">$ </span>npm install -g huddleup
+
+<span class="comment"># Snapshot your current AI session</span>
+<span class="prompt">$ </span>huddleup snapshot
+<span class="comment">→ Created session.huddleup.jsonl (3 files, 42 messages, 1 git diff)</span>
+
+<span class="comment"># Resume on another machine</span>
+<span class="prompt">$ </span>huddleup resume session.huddleup.jsonl
+<span class="comment">→ Restored 3 files, stashed working tree, replayed 42 messages</span></code></pre>
+
+      <div class="quickstart-footnote">
+        <p>Distributed via <a href="https://www.npmjs.com/package/huddleup" target="_blank">npm</a> • Open source on <a href={SITE.repo} target="_blank">GitHub</a> • AGPL-3.0 licensed</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quickstart-card{
+    max-width:720px;
+    margin:40px auto 0;
+  }
+  .quickstart-code{font-size:clamp(12px,1.5vw,14px);padding:20px 24px;border-radius:var(--radius)}
+  .quickstart-footnote{text-align:center;margin-top:16px;font-size:14px;color:var(--subtle)}
+</style>

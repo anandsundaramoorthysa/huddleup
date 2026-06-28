@@ -1,0 +1,76 @@
+---
+const steps = [
+  {
+    num: '1',
+    title: 'Install',
+    code: 'npm install -g huddleup',
+    caption: 'Requires Node.js 18+. Also available as a VS Code extension from the Marketplace.',
+  },
+  {
+    num: '2',
+    title: 'Snapshot your AI session',
+    code: 'huddleup snapshot',
+    caption: 'Auto-detects Cursor, Claude Code, Windsurf, Copilot, or Codex. Captures open files, git diff, chat history, and terminal scrollback into a portable `.huddleup.jsonl` file.',
+  },
+  {
+    num: '3',
+    title: 'Share with your team',
+    code: 'git add session.huddleup.jsonl\ngit commit -m "wip: handoff session"\ngit push',
+    caption: 'Commit the snapshot to your repo, paste it in Slack, attach to a Linear ticket, or transfer any way you like — it\'s just a file.',
+  },
+  {
+    num: '4',
+    title: 'Resume in one command',
+    code: 'huddleup resume session.huddleup.jsonl',
+    caption: 'Pulls up the same files, restores git state info (stash), replays chat context, and re-runs the scrollback. Your teammate picks up exactly where you left off.',
+  },
+];
+---
+
+<section class="section section-alt" id="how-it-works">
+  <div class="container">
+    <span class="section-label">How it works</span>
+    <h2 class="section-title">Four commands to go from "hold on" to "got it"</h2>
+    <p class="section-desc">No config files, no YAML, no platform accounts. Just a CLI that does one thing well.</p>
+
+    <div class="steps">
+      {steps.map(step => (
+        <div class="step">
+          <div class="step-number">{step.num}</div>
+          <div class="step-body">
+            <h3 class="step-title">{step.title}</h3>
+            <pre class="code-block"><code><span class="prompt">$ </span>{step.code}</code></pre>
+            <p class="step-caption">{step.caption}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-alt{background:var(--bg-alt)}
+  .steps{display:flex;flex-direction:column;gap:32px;margin-top:40px}
+  .step{display:flex;gap:20px;align-items:flex-start}
+  .step-number{
+    flex-shrink:0;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--indigo);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:18px;
+  }
+  .step-body{flex:1;min-width:0}
+  .step-title{font-size:1.1rem;font-weight:700;margin-bottom:12px}
+  .step-caption{font-size:14px;color:var(--muted);margin-top:12px;line-height:1.7;max-width:600px}
+  .code-block{margin:0}
+  @media(max-width:768px){
+    .step{flex-direction:column}
+    .step-number{width:36px;height:36px;font-size:15px}
+  }
+</style>
