@@ -319,7 +319,7 @@ If you find a security issue, **don't open a public issue** — email [sanand030
 | npm publish + Show HN launch | 🟡 Imminent |
 | Hosted team dashboard (Phase 6) | 🔲 Gated until ≥500 stars or ≥50 installs |
 
-Full project plan and roadmap in [`HuddleUp-Plan.md`](../HuddleUp-Plan.md) (private — not in this repo).
+For the live roadmap and discussion of upcoming features, see the [GitHub Issues](https://github.com/anandsundaramoorthysa/huddleup/issues) and the **Planned** section of [`CHANGELOG.md`](CHANGELOG.md).
 
 ---
 

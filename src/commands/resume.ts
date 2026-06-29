@@ -1,5 +1,5 @@
 import { readThread } from '../core/thread.js';
-import { readFile, writeFile, huddleupPath, fileExists } from '../core/files.js';
+import { writeFile, huddleupPath, fileExists } from '../core/files.js';
 import { readCharter } from '../core/charter.js';
 import { openFiles } from '../utils/editor.js';
 import { extractFilePaths } from '../adapters/base.js';
