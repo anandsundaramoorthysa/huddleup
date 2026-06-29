@@ -43,10 +43,17 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Publish to npm
+      - name: Publish to npm (skip if version already exists)
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VER=$(node -p "require('./package.json').version")
+          if npm view "$PKG_NAME@$PKG_VER" version >/dev/null 2>&1; then
+            echo "npm: $PKG_NAME@$PKG_VER already published — skipping."
+          else
+            npm publish --access public
+          fi
 
       - name: Build VS Code extension
         working-directory: vscode-huddleup
