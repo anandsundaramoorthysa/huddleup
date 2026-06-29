@@ -54,27 +54,33 @@
 }
 
 .dark {
-  --surface:      #0B0F1A;
-  --surface-alt:  #111827;
-  --surface-card: #131A2C;
-  --surface-code: #0A0F1A;
+  /* Three-step surface ladder: code (deepest) < surface (page) < alt (sections) < card (cards lift).
+     Wider spread than before so cards visibly lift off the background and terminals sit BELOW it. */
+  --surface:      #0A0E1A;
+  --surface-alt:  #11192B;
+  --surface-card: #1A2236;
+  --surface-code: #06090F;
   --surface-code-text: #E2E8F0;
+
   --ink:          #F1F5F9;
   --muted:        #94A3B8;
   --subtle:       #64748B;
-  --line:         #1F2937;
+  --line:         #293247;          /* was #1F2937 — too subtle to register as a border */
+
   --indigo:       #818CF8;
-  --indigo-soft:  rgba(99, 102, 241, .12);
-  --shadow-card:  0 1px 2px rgba(0, 0, 0, .3), 0 4px 12px rgba(0, 0, 0, .25);
+  --indigo-soft:  rgba(129, 140, 248, .20);  /* was .12 — pills/highlights now actually visible */
+
+  --shadow-card:  0 1px 2px rgba(0, 0, 0, .35), 0 8px 24px rgba(0, 0, 0, .35);
   color-scheme: dark;
 
-  /* Brighter foreground + slightly stronger tint so dots pop on dark */
-  --cmp-yes-bg:     color-mix(in srgb, #22c55e 22%, transparent);
-  --cmp-yes-fg:     #4ade80;
-  --cmp-no-bg:      color-mix(in srgb, #f87171 22%, transparent);
-  --cmp-no-fg:      #fca5a5;
-  --cmp-partial-bg: color-mix(in srgb, #f59e0b 26%, transparent);
-  --cmp-partial-fg: #fbbf24;
+  /* Strong tinted badge backgrounds so check/x circles and the "partial"
+     pill read clearly against the dark surface. */
+  --cmp-yes-bg:     color-mix(in srgb, #4ade80 30%, transparent);
+  --cmp-yes-fg:     #86efac;
+  --cmp-no-bg:      color-mix(in srgb, #f87171 30%, transparent);
+  --cmp-no-fg:      #fecaca;
+  --cmp-partial-bg: color-mix(in srgb, #fbbf24 35%, transparent);
+  --cmp-partial-fg: #fde68a;
 }
 
 /* ---------------------------------------------------------------
