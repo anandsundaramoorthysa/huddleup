@@ -255,3 +255,49 @@ html.dark .logo-dark,  html.dark .show-dark  { display: block !important; }
   }
   .term-cursor::after { animation: none; }
 }
+
+/* ---------------------------------------------------------------
+ * Mobile centering (phones, <= 640px)
+ * Centers section headers, card content, and footer columns.
+ * Cards' inline-flex icon containers center automatically because
+ * they're inline-level boxes that respect text-align on the parent.
+ * Excludes FAQ items (chevron layout) and pre/code (readability).
+ * ------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .section-label,
+  .section-title,
+  .section-desc {
+    text-align: center;
+  }
+  .section-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Default card content centers (icon + heading + body) */
+  .card {
+    text-align: center;
+  }
+
+  /* FAQ items must keep LTR — they use a flex justify-between
+     summary with chevron icon on the right */
+  #faq .card {
+    text-align: left;
+  }
+
+  /* Code / terminal content always reads better left-aligned,
+     even when its surrounding card is centered */
+  pre, code, .term, .term-body, .term-bar {
+    text-align: left;
+  }
+  .term-title { margin-left: auto; }
+
+  /* QuickStart: keep the snippet box readable */
+  #quick-start pre code { text-align: left; }
+
+  /* Footer columns center each column's content + link rows */
+  footer .grid > div { text-align: center; }
+  footer ul a { justify-content: center; }
+  footer .footer-tagline,
+  footer p { text-align: center; }
+}
