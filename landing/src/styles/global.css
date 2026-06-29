@@ -213,14 +213,18 @@ html.theme-ready body { visibility: visible; }
 }
 
 /* ---------------------------------------------------------------
- * Logo theme swap — declared OUTSIDE @layer with !important so
- * Tailwind's preflight (img { display: block }) cannot override.
- * One and only one logo image is visible at any time.
+ * Theme-conditional visibility — declared OUTSIDE @layer with
+ * !important so Tailwind's preflight cannot override.
+ *
+ * Use:
+ *   class="logo-light" / class="logo-dark"   for <img> logo swaps
+ *   class="show-light" / class="show-dark"   for any element
+ *                                            (e.g. lucide SVG icons)
  * ------------------------------------------------------------- */
-img.logo-light { display: block !important; }
-img.logo-dark  { display: none  !important; }
-html.dark img.logo-light { display: none  !important; }
-html.dark img.logo-dark  { display: block !important; }
+.logo-light, .show-light { display: block !important; }
+.logo-dark,  .show-dark  { display: none  !important; }
+html.dark .logo-light, html.dark .show-light { display: none  !important; }
+html.dark .logo-dark,  html.dark .show-dark  { display: block !important; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
