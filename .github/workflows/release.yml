@@ -18,6 +18,12 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Promote the marketplace secrets to job-level env so the step-level
+    # `if: env.X != ''` conditionals can actually read them (GitHub
+    # Actions evaluates `if:` BEFORE setting step-level `env:`).
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -51,15 +57,11 @@ jobs:
       - name: Publish to VS Code Marketplace
         if: env.VSCE_PAT != ''
         working-directory: vscode-huddleup
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: npx @vscode/vsce publish -p "$VSCE_PAT"
 
       - name: Publish to Open VSX
         if: env.OVSX_PAT != ''
         working-directory: vscode-huddleup
-        env:
-          OVSX_PAT: ${{ secrets.OVSX_PAT }}
         run: npx ovsx publish -p "$OVSX_PAT"
 
       - name: Create GitHub Release
