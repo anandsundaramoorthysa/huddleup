@@ -66,15 +66,21 @@ jobs:
         working-directory: vscode-huddleup
         run: npx @vscode/vsce publish -p "$VSCE_PAT"
 
-      - name: Publish to Open VSX
+      - name: Publish to Open VSX (idempotent)
         if: env.OVSX_PAT != ''
         working-directory: vscode-huddleup
         run: |
-          # Create namespace if it doesn't exist (idempotent — swallow "already" errors)
+          # Step 1: create namespace if it doesn't exist (swallow "already" errors)
           npx ovsx create-namespace AnandSundaramoorthySa -p "$OVSX_PAT" 2>&1 \
             | tee /tmp/ovsx-ns.log \
             || grep -qiE "(already exists|already been registered|already taken|namespace.*exists)" /tmp/ovsx-ns.log
-          npx ovsx publish -p "$OVSX_PAT"
+          # Step 2: publish only if the current version isn't already published
+          EXT_VER=$(node -p "require('./package.json').version")
+          if npx ovsx get AnandSundaramoorthySa.vscode-huddleup "$EXT_VER" >/dev/null 2>&1; then
+            echo "Open VSX: AnandSundaramoorthySa.vscode-huddleup@$EXT_VER already published - skipping."
+          else
+            npx ovsx publish -p "$OVSX_PAT"
+          fi
 
       - name: Create GitHub Release
         # Only runs on tag-push (workflow_dispatch has no tag context;
