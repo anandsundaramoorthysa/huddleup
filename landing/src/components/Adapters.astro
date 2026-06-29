@@ -1,85 +1,32 @@
 ---
-const adapters = [
-  {
-    name: 'Cursor',
-    icon: 'cursor',
-    desc: 'Reads ~/.cursor/{sessions,chats}/ and the workspaceStorage folders under VS Code-style globalStorage on macOS, Linux, and Windows.',
-  },
-  {
-    name: 'Claude Code',
-    icon: 'claude',
-    desc: 'Reads ~/.claude/projects/<hash>/*.jsonl (modern) and ~/.claude/sessions/*.jsonl (legacy). Writes CLAUDE.md with the Token Exhaustion Protocol.',
-  },
-  {
-    name: 'Windsurf',
-    icon: 'windsurf',
-    desc: 'Detects ~/.windsurf/, ~/.codeium/, and the Windsurf/Codeium application data folders across platforms.',
-  },
-  {
-    name: 'GitHub Copilot',
-    icon: 'copilot',
-    desc: 'Reads VS Code globalStorage (github.copilot-chat) for Code, Code Insiders, and Cursor; also ~/.github/copilot/ and ~/.vscode/copilot/.',
-  },
-  {
-    name: 'Codex CLI',
-    icon: 'codex',
-    desc: 'Detects ~/.codex/ and the Codex app data folders on macOS, Linux, and Windows. Parses JSON, JSONL, and plain-log session files.',
-  },
-  {
-    name: 'Custom',
-    icon: 'custom',
-    desc: 'Add a new adapter in src/adapters/ — implement detect() + capture() and call registerAdapter(). About 80 lines. See docs/adapters.md.',
-  },
-];
+import { Icon } from 'astro-icon/components';
+import { ADAPTERS } from '../config';
 ---
 
-<section class="section" id="adapters">
-  <div class="container">
+<section id="adapters" class="section" style="background: var(--surface-alt);">
+  <div class="container-wide">
     <span class="section-label">Adapters</span>
-    <h2 class="section-title">Works with the AI tools you already use</h2>
-    <p class="section-desc">HuddleUp auto-detects every tool installed on the machine. Multiple adapters can match; their messages and open-file lists merge into a single snapshot.</p>
+    <h2 class="section-title">Auto-detected. Cross-platform. Easy to extend.</h2>
+    <p class="section-desc">
+      HuddleUp probes every supported tool on the machine. Multiple adapters can match — their open files and last messages merge into a single snapshot. The thread's <code class="code-inline">Tools</code> field lists every contributor.
+    </p>
 
-    <div class="adapters-grid">
-      {adapters.map(a => (
-        <div class="card adapter-card">
-          <div class="adapter-icon" aria-hidden="true">
-            {a.icon === 'cursor' && (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l4.5 14 2.5-6 6-2.5L5 3z"/></svg>
-            )}
-            {a.icon === 'claude' && (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-4 6 4 6M16 6l4 6-4 6M14 4l-4 16"/></svg>
-            )}
-            {a.icon === 'windsurf' && (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8c2.5-2.5 5-2.5 7.5 0S15 10.5 17.5 8 22 5.5 22 5.5"/><path d="M2 14c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 4.5-2.5 4.5-2.5"/><path d="M2 20c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 4.5-2.5 4.5-2.5"/></svg>
-            )}
-            {a.icon === 'copilot' && (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-            )}
-            {a.icon === 'codex' && (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 9l3 3-3 3"/><path d="M13 15h5"/></svg>
-            )}
-            {a.icon === 'custom' && (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/></svg>
-            )}
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {ADAPTERS.map((a) => (
+        <article
+          class="card reveal relative overflow-hidden"
+          style={`border-top: 3px solid ${a.accent};`}
+        >
+          <div
+            class="inline-flex items-center justify-center w-11 h-11 rounded-xl mb-4"
+            style={`background: color-mix(in srgb, ${a.accent} 14%, transparent); color: ${a.accent};`}
+          >
+            <Icon name={a.icon} width="22" height="22" aria-hidden="true" />
           </div>
-          <h3 class="adapter-name">{a.name}</h3>
-          <p class="adapter-desc">{a.desc}</p>
-        </div>
+          <h3 class="text-base font-semibold" style="color: var(--ink);">{a.name}</h3>
+          <p class="mt-2 text-sm leading-relaxed" style="color: var(--muted);">{a.desc}</p>
+        </article>
       ))}
     </div>
   </div>
 </section>
-
-<style>
-  .adapters-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
-  .adapter-card{text-align:center}
-  .adapter-icon{margin-bottom:12px;display:flex;justify-content:center}
-  .adapter-name{font-size:1rem;font-weight:700;margin-bottom:6px}
-  .adapter-desc{font-size:13px;color:var(--muted);line-height:1.6}
-  @media(max-width:768px){
-    .adapters-grid{grid-template-columns:repeat(2,1fr)}
-  }
-  @media(max-width:480px){
-    .adapters-grid{grid-template-columns:1fr}
-  }
-</style>

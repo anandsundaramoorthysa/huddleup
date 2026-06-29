@@ -1,0 +1,29 @@
+---
+import { Icon } from 'astro-icon/components';
+import { PROBLEMS } from '../config';
+---
+
+<section id="problem" class="section">
+  <div class="container-wide">
+    <span class="section-label">The problem</span>
+    <h2 class="section-title">Vibe coding is great. Until two people share a feature.</h2>
+    <p class="section-desc">
+      Static rules files (<code class="code-inline">CLAUDE.md</code>, <code class="code-inline">.cursor/rules/</code>) describe how your team likes to work. They tell the AI nothing about what was tried in the last session. That gap shows up three ways.
+    </p>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-3">
+      {PROBLEMS.map((p) => (
+        <article class="card reveal">
+          <div
+            class="inline-flex items-center justify-center w-10 h-10 rounded-lg mb-4"
+            style="background: var(--indigo-soft); color: var(--indigo);"
+          >
+            <Icon name={p.icon} width="20" height="20" aria-hidden="true" />
+          </div>
+          <h3 class="text-base font-semibold" style="color: var(--ink);">{p.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed" style="color: var(--muted);">{p.desc}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

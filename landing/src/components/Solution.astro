@@ -1,0 +1,84 @@
+---
+import { Icon } from 'astro-icon/components';
+import Terminal from './Terminal.astro';
+
+const devATerm = `$ huddleup snapshot
+? Which thread? streaming-chat-endpoint
+? Where did you leave it?
+  streaming works for short responses, fails on >2KB
+? Any warnings for the next person? (none)
+
+  Snapshot saved to threads/streaming-chat-endpoint.md
+  Author: anand
+  Tools:  claude-code
+  Branch: master
+  Files changed: 3
+  Open files (inferred): 5
+  AI messages captured: 47
+
+  Your teammate can now run:
+    huddleup resume streaming-chat-endpoint
+`;
+
+const devBTerm = `$ git pull && huddleup resume streaming-chat-endpoint
+
+  ══════════════════════════════════════════
+    YOU ARE HERE
+    Thread: streaming-chat-endpoint
+    Owner:  anand
+    Status: active
+    Last update: 2026-06-29 22:47:00
+    Last note: "streaming works for short responses, fails on >2KB"
+  ══════════════════════════════════════════
+
+  Opening relevant files:
+    src/routes/chat.ts
+    src/lib/stream.ts
+
+  Context written to .huddleup/resume-context.md
+  Continue where your teammate left off.
+`;
+---
+
+<section id="solution" class="section" style="background: var(--surface-alt);">
+  <div class="container-wide">
+    <span class="section-label">The solution</span>
+    <h2 class="section-title">Two commands. One in each terminal.</h2>
+    <p class="section-desc">
+      Dev A captures their session as plain markdown. Dev B picks it up — in whichever AI tool they prefer. The AI starts the next prompt already knowing what was tried.
+    </p>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-2">
+      <div class="reveal">
+        <div class="flex items-center gap-2 mb-3 text-xs uppercase tracking-[0.18em]" style="color: var(--subtle);">
+          <Icon name="lucide:camera" width="14" height="14" aria-hidden="true" />
+          Dev A · snapshot
+        </div>
+        <Terminal title="bash · anand@laptop">{devATerm}</Terminal>
+      </div>
+
+      <div class="reveal">
+        <div class="flex items-center gap-2 mb-3 text-xs uppercase tracking-[0.18em]" style="color: var(--subtle);">
+          <Icon name="lucide:play" width="14" height="14" aria-hidden="true" />
+          Dev B · resume
+        </div>
+        <Terminal title="bash · priya@laptop">{devBTerm}</Terminal>
+      </div>
+    </div>
+
+    <aside
+      class="mt-10 max-w-3xl mx-auto p-5 sm:p-6 rounded-2xl flex items-start gap-4"
+      style="background: var(--surface); border: 1px solid var(--line);"
+    >
+      <div class="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg" style="background: var(--indigo-soft); color: var(--indigo);">
+        <Icon name="lucide:shield-check" width="20" height="20" aria-hidden="true" />
+      </div>
+      <div>
+        <p class="text-sm font-semibold" style="color: var(--ink);">Token Exhaustion Protocol</p>
+        <p class="mt-1 text-sm" style="color: var(--muted);">
+          Even if a human forgets to snapshot, the AI does. The generated config files (<code class="code-inline">CLAUDE.md</code>, <code class="code-inline">.cursor/rules/huddleup.mdc</code>, <code class="code-inline">AGENTS.md</code>, <code class="code-inline">.windsurfrules</code>) tell the model to run <code class="code-inline">huddleup snapshot</code> when its session hits ~10% tokens remaining. Threshold configurable in <code class="code-inline">.huddleup/config.json</code>.
+        </p>
+      </div>
+    </aside>
+  </div>
+</section>

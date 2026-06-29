@@ -1,29 +1,41 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { SITE } from '../config';
 ---
 
-<section class="cta-section section">
-  <div class="container cta-content">
-    <h2 class="cta-title">Stop re-explaining. Start shipping.</h2>
-    <p class="cta-desc">HuddleUp is free, open source, and ready to use. No accounts, no data uploads, no strings attached.</p>
-    <div class="cta-actions">
-      <a href={SITE.repo} class="btn btn-primary" target="_blank" rel="noopener">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        Star on GitHub
+<section class="section" style="background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);">
+  <div class="container-narrow text-center">
+    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight" style="color: var(--ink); line-height: 1.15;">
+      Stop re-explaining.
+      <br />
+      Start shipping.
+    </h2>
+    <p class="mt-5 text-base sm:text-lg" style="color: var(--muted);">
+      One install command. One snapshot. One resume. Your team is huddled in.
+    </p>
+
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <button
+        type="button"
+        data-copy={SITE.installCommand}
+        class="btn btn-primary"
+        aria-label="Copy install command"
+      >
+        <Icon name="lucide:package" width="16" height="16" aria-hidden="true" />
+        <span class="font-mono text-[13px]">$ {SITE.installCommand}</span>
+        <span class="ml-1 inline-flex items-center gap-1 text-[11px] uppercase tracking-wider" data-copy-label>
+          <Icon name="lucide:copy" width="12" height="12" aria-hidden="true" />
+          Copy
+        </span>
+      </button>
+      <a href={SITE.repo} class="btn btn-outline" target="_blank" rel="noopener">
+        <Icon name="lucide:github" width="16" height="16" aria-hidden="true" />
+        GitHub
       </a>
-      <a href="#quick-start" class="btn btn-outline">Quick start</a>
+      <a href={SITE.vsCodeUrl} class="btn btn-outline" target="_blank" rel="noopener">
+        <Icon name="lucide:panel-left" width="16" height="16" aria-hidden="true" />
+        VS Code extension
+      </a>
     </div>
   </div>
 </section>
-
-<style>
-  .cta-section{text-align:center;background:linear-gradient(180deg,var(--bg-alt) 0%,var(--bg) 100%)}
-  .cta-content{display:flex;flex-direction:column;align-items:center}
-  .cta-title{font-size:clamp(1.5rem,3vw,2rem);font-weight:700;margin-bottom:12px}
-  .cta-desc{font-size:1rem;color:var(--muted);max-width:500px;line-height:1.7;margin-bottom:28px}
-  .cta-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-  @media(max-width:480px){
-    .cta-actions{flex-direction:column;width:100%}
-    .cta-actions .btn{width:100%;justify-content:center}
-  }
-</style>

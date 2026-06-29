@@ -1,0 +1,74 @@
+---
+import { Icon } from 'astro-icon/components';
+import { COMPARISON } from '../config';
+
+function renderCell(v: boolean | string) {
+  if (v === true) return { kind: 'yes' as const };
+  if (v === false) return { kind: 'no' as const };
+  if (v === 'partial') return { kind: 'partial' as const };
+  return { kind: 'text' as const, label: String(v) };
+}
+---
+
+<section id="compare" class="section">
+  <div class="container-wide">
+    <span class="section-label">Compare</span>
+    <h2 class="section-title">How HuddleUp differs from static rules + memory banks</h2>
+    <p class="section-desc">
+      Static rules (CLAUDE.md, .cursor/rules) carry your conventions. Memory bank tools persist context for one tool. HuddleUp adds the missing live, cross-tool handoff layer.
+    </p>
+
+    <div class="mt-10 overflow-x-auto rounded-2xl border" style="border-color: var(--line); background: var(--surface-card);">
+      <table class="w-full text-sm">
+        <thead style="background: var(--surface-alt);">
+          <tr>
+            {COMPARISON.headers.map((h, i) => (
+              <th
+                class="text-left px-4 py-3.5 font-semibold whitespace-nowrap"
+                style={`color: ${i === COMPARISON.headers.length - 1 ? 'var(--indigo)' : 'var(--ink)'}; ${i === 0 ? '' : 'text-align: center;'}`}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {COMPARISON.rows.map((row, rowIdx) => (
+            <tr style={`border-top: 1px solid var(--line);`}>
+              <td class="px-4 py-3.5 font-medium" style="color: var(--ink);">{row.feature}</td>
+              {row.values.map((v, i) => {
+                const cell = renderCell(v);
+                const isHuddleupCol = i === row.values.length - 1;
+                return (
+                  <td
+                    class="px-4 py-3.5 text-center"
+                    style={isHuddleupCol ? 'background: color-mix(in srgb, var(--indigo) 6%, transparent);' : ''}
+                  >
+                    {cell.kind === 'yes' && (
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-full" style={`background: color-mix(in srgb, ${isHuddleupCol ? '#22c55e' : '#22c55e'} 18%, transparent); color: #16a34a;`} aria-label="Yes">
+                        <Icon name="lucide:check" width="14" height="14" aria-hidden="true" />
+                      </span>
+                    )}
+                    {cell.kind === 'no' && (
+                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-full" style="background: color-mix(in srgb, #ef4444 14%, transparent); color: #b91c1c;" aria-label="No">
+                        <Icon name="lucide:x" width="14" height="14" aria-hidden="true" />
+                      </span>
+                    )}
+                    {cell.kind === 'partial' && (
+                      <span class="inline-flex items-center justify-center px-2.5 h-6 rounded-full text-[11px] font-semibold" style="background: color-mix(in srgb, #f59e0b 18%, transparent); color: #b45309;" aria-label="Partial">
+                        partial
+                      </span>
+                    )}
+                    {cell.kind === 'text' && (
+                      <span class="text-xs font-semibold" style="color: var(--ink);">{cell.label}</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

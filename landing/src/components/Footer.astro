@@ -1,48 +1,49 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { SITE } from '../config';
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-brand">
-      <a href="/" class="footer-logo-link">
-        <img src="/images/logo-horizontal.svg" alt="HuddleUp" width="120" height="28" />
-      </a>
-      <p class="footer-tagline">{SITE.tagline}</p>
-    </div>
-    <nav class="footer-nav">
-      <a href="#features">Features</a>
-      <a href="#how-it-works">How it works</a>
-      <a href="#quick-start">Quick start</a>
-      <a href="#adapters">Adapters</a>
-      <a href={SITE.repo} target="_blank" rel="noopener">GitHub</a>
-    </nav>
-    <div class="footer-meta">
-      <a href={`${SITE.repo}/blob/master/LICENSE`} target="_blank" rel="noopener">AGPL-3.0</a>
-      <span class="footer-sep">·</span>
-      <span>&copy; {year} {SITE.author}</span>
+<footer class="py-12" style="border-top: 1px solid var(--line); background: var(--surface);">
+  <div class="container-wide">
+    <div class="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div>
+        <a href="/" class="inline-flex" aria-label="HuddleUp home">
+          <img src="/images/logo-horizontal.svg" alt="HuddleUp" width="140" height="32" class="block dark:hidden" />
+          <img src="/images/logo-horizontal-dark.svg" alt="HuddleUp" width="140" height="32" class="hidden dark:block" />
+        </a>
+        <p class="mt-4 text-sm max-w-xs" style="color: var(--muted);">{SITE.tagline}</p>
+        <p class="mt-3 text-xs" style="color: var(--subtle);">© {year} {SITE.author} · AGPL-3.0</p>
+      </div>
+
+      <div>
+        <p class="text-xs uppercase tracking-[0.16em] font-semibold mb-3" style="color: var(--subtle);">Product</p>
+        <ul class="space-y-2 text-sm" style="color: var(--muted);">
+          <li><a href="#features" class="hover:underline">Features</a></li>
+          <li><a href="#adapters" class="hover:underline">Adapters</a></li>
+          <li><a href="#compare" class="hover:underline">Compare</a></li>
+          <li><a href="#faq" class="hover:underline">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="text-xs uppercase tracking-[0.16em] font-semibold mb-3" style="color: var(--subtle);">Install</p>
+        <ul class="space-y-2 text-sm" style="color: var(--muted);">
+          <li><a href={SITE.npmUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:underline"><Icon name="lucide:package" width="14" height="14" aria-hidden="true" />npm</a></li>
+          <li><a href={SITE.vsCodeUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:underline"><Icon name="lucide:panel-left" width="14" height="14" aria-hidden="true" />VS Code Marketplace</a></li>
+          <li><a href={SITE.openVsxUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:underline"><Icon name="lucide:puzzle" width="14" height="14" aria-hidden="true" />Open VSX</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="text-xs uppercase tracking-[0.16em] font-semibold mb-3" style="color: var(--subtle);">Project</p>
+        <ul class="space-y-2 text-sm" style="color: var(--muted);">
+          <li><a href={SITE.repo} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:underline"><Icon name="lucide:github" width="14" height="14" aria-hidden="true" />GitHub</a></li>
+          <li><a href={`${SITE.repo}/issues`} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:underline"><Icon name="lucide:bug" width="14" height="14" aria-hidden="true" />Issues</a></li>
+          <li><a href={`${SITE.repo}/blob/master/CHANGELOG.md`} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:underline"><Icon name="lucide:scroll-text" width="14" height="14" aria-hidden="true" />Changelog</a></li>
+          <li><a href={`${SITE.repo}/blob/master/LICENSE`} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:underline"><Icon name="lucide:scale" width="14" height="14" aria-hidden="true" />AGPL-3.0</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </footer>
-
-<style>
-  .footer{
-    border-top:1px solid var(--border);
-    padding:40px 0;
-    font-size:14px;
-    color:var(--subtle);
-  }
-  .footer-inner{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
-  .footer-brand{flex:1;min-width:200px}
-  .footer-logo-link{display:inline-block;line-height:0;margin-bottom:4px}
-  .footer-tagline{margin:0;font-size:13px}
-  .footer-nav{display:flex;gap:16px;flex-wrap:wrap}
-  .footer-nav a{color:var(--muted)}
-  .footer-nav a:hover{color:var(--indigo)}
-  .footer-meta{font-size:13px}
-  .footer-sep{margin:0 6px}
-  @media(max-width:600px){
-    .footer-inner{flex-direction:column;align-items:flex-start;gap:16px}
-  }
-</style>

@@ -2,22 +2,64 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
+import SocialProof from '../components/SocialProof.astro';
+import Problem from '../components/Problem.astro';
+import Solution from '../components/Solution.astro';
 import Features from '../components/Features.astro';
-import HowItWorks from '../components/HowItWorks.astro';
 import Adapters from '../components/Adapters.astro';
+import Comparison from '../components/Comparison.astro';
 import QuickStart from '../components/QuickStart.astro';
+import FAQ from '../components/FAQ.astro';
 import CTA from '../components/CTA.astro';
 import Footer from '../components/Footer.astro';
+import { SITE, FAQS, QUICKSTART_STEPS } from '../config';
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const howToJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Install HuddleUp and hand off your first AI coding session',
+  description:
+    'Install the HuddleUp CLI, initialise it in your project, take a snapshot of your AI coding session, and let a teammate resume it in any AI tool.',
+  totalTime: 'PT2M',
+  tool: [
+    { '@type': 'HowToTool', name: 'Node.js 20+' },
+    { '@type': 'HowToTool', name: 'git' },
+  ],
+  step: QUICKSTART_STEPS.map((step, idx) => ({
+    '@type': 'HowToStep',
+    position: idx + 1,
+    name: step.label,
+    text: step.caption,
+    url: `${SITE.url}/#quick-start`,
+  })),
+};
 ---
 
-<BaseLayout>
+<BaseLayout extraJsonLd={[faqJsonLd, howToJsonLd]}>
   <Header />
   <main>
     <Hero />
+    <SocialProof />
+    <Problem />
+    <Solution />
     <Features />
-    <HowItWorks />
     <Adapters />
+    <Comparison />
     <QuickStart />
+    <FAQ />
     <CTA />
   </main>
   <Footer />

@@ -1,66 +1,101 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { NAV, SITE } from '../config';
 ---
 
-<header class="header">
-  <div class="container header-inner">
-    <a href="/" class="logo-link" aria-label="HuddleUp home">
-      <img src="/images/logo-horizontal.svg" alt="HuddleUp" width="160" height="36" class="logo-light" />
-      <img src="/images/logo-horizontal-dark.svg" alt="HuddleUp" width="160" height="36" class="logo-dark" />
+<header class="sticky top-0 z-50 backdrop-blur" style="background: color-mix(in srgb, var(--surface) 80%, transparent); border-bottom: 1px solid var(--line);">
+  <div class="container-wide flex items-center gap-6 h-16">
+    <a href="/" class="flex items-center" aria-label="HuddleUp home">
+      <img src="/images/logo-horizontal.svg" alt="HuddleUp" width="148" height="34" class="block dark:hidden" />
+      <img src="/images/logo-horizontal-dark.svg" alt="HuddleUp" width="148" height="34" class="hidden dark:block" />
     </a>
-    <nav class="nav">
-      {NAV.map(item => (
-        <a href={item.href} class="nav-link">{item.label}</a>
+
+    <nav class="hidden md:flex items-center gap-1 flex-1">
+      {NAV.map((item) => (
+        <a
+          href={item.href}
+          class="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:no-underline"
+          style="color: var(--muted);"
+          onmouseover="this.style.color='var(--ink)'; this.style.background='var(--surface-alt)'"
+          onmouseout="this.style.color='var(--muted)'; this.style.background='transparent'"
+        >
+          {item.label}
+        </a>
       ))}
     </nav>
-    <a href={SITE.repo} class="btn btn-primary btn-small" target="_blank" rel="noopener">GitHub</a>
-    <button class="menu-toggle" aria-label="Menu" id="menuToggle">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+
+    <div class="ml-auto flex items-center gap-2">
+      <a
+        href={SITE.repo}
+        target="_blank"
+        rel="noopener"
+        class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors"
+        style="border: 1px solid var(--line); color: var(--ink);"
+        aria-label="Star HuddleUp on GitHub"
+      >
+        <Icon name="lucide:star" width="14" height="14" aria-hidden="true" />
+        <span>Star on GitHub</span>
+      </a>
+
+      <button
+        type="button"
+        data-theme-toggle
+        class="inline-flex items-center justify-center w-9 h-9 rounded-md transition-colors"
+        style="border: 1px solid var(--line); color: var(--ink);"
+        aria-label="Toggle dark mode"
+      >
+        <Icon name="lucide:sun" width="16" height="16" class="block dark:hidden" aria-hidden="true" />
+        <Icon name="lucide:moon" width="16" height="16" class="hidden dark:block" aria-hidden="true" />
+      </button>
+
+      <button
+        type="button"
+        id="menuToggle"
+        class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-md transition-colors"
+        style="border: 1px solid var(--line); color: var(--ink);"
+        aria-label="Open menu"
+        aria-controls="mobileNav"
+        aria-expanded="false"
+      >
+        <Icon name="lucide:menu" width="18" height="18" aria-hidden="true" />
+      </button>
+    </div>
   </div>
+
+  <nav
+    id="mobileNav"
+    hidden
+    class="md:hidden border-t flex flex-col px-5 py-3 gap-1"
+    style="border-color: var(--line); background: var(--surface);"
+  >
+    {NAV.map((item) => (
+      <a href={item.href} class="px-3 py-2 rounded-md text-sm font-medium" style="color: var(--ink);">
+        {item.label}
+      </a>
+    ))}
+  </nav>
 </header>
 
-<style>
-  .header{
-    position:sticky;
-    top:0;
-    z-index:100;
-    background:rgba(255,255,255,.85);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-    border-bottom:1px solid var(--border);
-  }
-  .header-inner{
-    display:flex;
-    align-items:center;
-    gap:32px;
-    height:64px;
-  }
-  .logo-link{flex-shrink:0;line-height:0}
-  .logo-light{display:block}
-  .logo-dark{display:none}
-  .nav{display:flex;gap:4px;flex:1}
-  .nav-link{
-    padding:8px 14px;
-    border-radius:6px;
-    font-size:14px;
-    font-weight:500;
-    color:var(--muted);
-    transition:color .2s,background .2s;
-  }
-  .nav-link:hover{color:var(--ink);background:var(--bg-alt);text-decoration:none}
-  .btn-small{padding:8px 18px;font-size:13px;flex-shrink:0}
-  .menu-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:8px;margin-left:auto}
-  @media(max-width:768px){
-    .nav{display:none}
-    .nav.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:12px;gap:2px}
-    .menu-toggle{display:block}
-    .header .btn{display:none}
-  }
-</style>
-
-<script>
-  document.getElementById('menuToggle')?.addEventListener('click', () => {
-    document.querySelector('.nav')?.classList.toggle('open');
-  });
+<script is:inline>
+  (function () {
+    const btn = document.getElementById('menuToggle');
+    const nav = document.getElementById('mobileNav');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', () => {
+      const open = !nav.hasAttribute('hidden');
+      if (open) {
+        nav.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        nav.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+    nav.addEventListener('click', (e) => {
+      if (e.target && e.target.tagName === 'A') {
+        nav.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
 </script>

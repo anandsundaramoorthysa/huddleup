@@ -1,0 +1,35 @@
+---
+import { SOCIAL_BADGES } from '../config';
+---
+
+<section class="py-8" style="background: var(--surface-alt); border-block: 1px solid var(--line);">
+  <div class="container-wide">
+    <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+      {SOCIAL_BADGES.map((b) => (
+        <a
+          href={b.href}
+          target="_blank"
+          rel="noopener"
+          aria-label={b.label}
+          class="inline-flex hover:opacity-80 transition-opacity"
+        >
+          <img src={b.img} alt={b.label} loading="lazy" decoding="async" height="20" />
+        </a>
+      ))}
+    </div>
+    <p class="mt-5 text-center text-xs uppercase tracking-[0.18em]" style="color: var(--subtle);">
+      Works with the AI coding tools you already use
+    </p>
+    <div class="mt-3 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm font-semibold" style="color: var(--muted);">
+      <span>Claude Code</span>
+      <span class="opacity-40">·</span>
+      <span>Cursor</span>
+      <span class="opacity-40">·</span>
+      <span>Codex CLI</span>
+      <span class="opacity-40">·</span>
+      <span>GitHub Copilot</span>
+      <span class="opacity-40">·</span>
+      <span>Windsurf</span>
+    </div>
+  </div>
+</section>

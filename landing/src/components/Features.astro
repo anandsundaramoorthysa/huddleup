@@ -1,75 +1,34 @@
 ---
-import { SITE } from '../config';
-
-const features = [
-  {
-    title: 'Snapshot in seconds',
-    desc: 'Capture git diff, your one-line note, last AI messages, inferred open files, and the active branch into a per-thread markdown file. The AI tool config files HuddleUp generates carry a Token Exhaustion Protocol so the AI itself runs `huddleup snapshot` when context is about to overflow.',
-    img: '/images/screenshot-snapshot.png',
-    imgAlt: 'Terminal showing huddleup snapshot command',
-  },
-  {
-    title: 'Resume instantly',
-    desc: 'Teammates run one `huddleup resume` command and get a YOU ARE HERE briefing, the relevant files opened in the editor, and a context file the AI tool reads on its next prompt.',
-    img: '/images/screenshot-resume.png',
-    imgAlt: 'Terminal showing huddleup resume command',
-  },
-  {
-    title: 'VS Code companion',
-    desc: 'The extension adds a sidebar panel with Snapshot, Resume, and Standup buttons plus a per-thread Resume/Archive list. Every action is also in the command palette.',
-    img: '/images/screenshot-sidebar.png',
-    imgAlt: 'VS Code sidebar showing HuddleUp extension panel',
-  },
-  {
-    title: 'Multi-tool capture',
-    desc: 'Works with Cursor, Claude Code, Windsurf, GitHub Copilot, and OpenAI Codex CLI. detectAllAdapters() captures messages from every detected tool and merges them into one snapshot — the thread\'s Tools field lists everyone who contributed.',
-  },
-  {
-    title: 'Portable & private',
-    desc: 'The whole .huddleup/ folder is plain markdown plus JSONL history — commit it to git, paste it in Slack, attach it to a Linear ticket. No cloud, no accounts, no data leaves your machine. Optional handoffWebhook posts a JSON payload when you explicitly call `huddleup handoff <teammate>`.',
-  },
-  {
-    title: 'No lock-in',
-    desc: 'Open source (AGPL-3.0), CLI-first, Node.js 20+. Dependencies are intentionally small (commander, inquirer, chalk, simple-git, conf). Uninstall any time — your .huddleup/ folder is still useful as plain markdown.',
-  },
-];
+import { Icon } from 'astro-icon/components';
+import { FEATURES } from '../config';
 ---
 
-<section class="section" id="features">
-  <div class="container">
+<section id="features" class="section">
+  <div class="container-wide">
     <span class="section-label">Features</span>
-    <h2 class="section-title">Everything your team needs for seamless AI handoffs</h2>
-    <p class="section-desc">{SITE.description}</p>
+    <h2 class="section-title">Everything teams need for seamless AI handoffs</h2>
+    <p class="section-desc">
+      Built for the actual loop: code with an AI tool, snapshot, hand off, resume. No backend to host. No accounts to provision.
+    </p>
 
-    <div class="features-grid">
-      {features.map((f) => (
-        <article class="card feature-card">
-          {f.img && (
-            <div class="feature-screenshot screenshot-frame">
-              <img src={f.img} alt={f.imgAlt} loading="lazy" />
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {FEATURES.map((f) => (
+        <article class="card reveal flex flex-col">
+          <div
+            class="inline-flex items-center justify-center w-10 h-10 rounded-lg mb-4"
+            style="background: var(--indigo-soft); color: var(--indigo);"
+          >
+            <Icon name={f.icon} width="20" height="20" aria-hidden="true" />
+          </div>
+          <h3 class="text-base font-semibold" style="color: var(--ink);">{f.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed flex-1" style="color: var(--muted);">{f.desc}</p>
+          {f.screenshot && (
+            <div class="mt-5 -mx-1 rounded-lg overflow-hidden border" style="border-color: var(--line); background: var(--surface-alt);">
+              <img src={f.screenshot} alt={f.alt} loading="lazy" decoding="async" class="w-full h-auto" />
             </div>
           )}
-          <div class="feature-body">
-            <h3 class="feature-title">{f.title}</h3>
-            <p class="feature-desc">{f.desc}</p>
-          </div>
         </article>
       ))}
     </div>
   </div>
 </section>
-
-<style>
-  .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
-  .feature-card{display:flex;flex-direction:column;gap:20px}
-  .feature-card:first-child{grid-column:1/-1}
-  .feature-card:first-child .feature-screenshot{max-width:700px}
-  .feature-screenshot{overflow:hidden}
-  .feature-screenshot img{width:100%;display:block;transition:transform .3s}
-  .feature-card:hover .feature-screenshot img{transform:scale(1.02)}
-  .feature-title{font-size:1.1rem;font-weight:700;margin-bottom:8px}
-  .feature-desc{font-size:14px;color:var(--muted);line-height:1.7}
-  @media(max-width:768px){
-    .features-grid{grid-template-columns:1fr}
-  }
-</style>
