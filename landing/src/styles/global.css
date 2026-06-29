@@ -210,6 +210,13 @@ html.theme-ready body { visibility: visible; }
     transition: opacity .5s ease, transform .5s ease;
   }
   .reveal.is-in { opacity: 1; transform: none; }
+
+  /* Logo theme swap — explicit CSS so it's not at the mercy
+     of Tailwind's dark: JIT picking up the custom-variant. */
+  .logo-light { display: block; }
+  .logo-dark  { display: none; }
+  .dark .logo-light { display: none; }
+  .dark .logo-dark  { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
