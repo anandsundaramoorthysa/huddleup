@@ -69,7 +69,12 @@ jobs:
       - name: Publish to Open VSX
         if: env.OVSX_PAT != ''
         working-directory: vscode-huddleup
-        run: npx ovsx publish -p "$OVSX_PAT"
+        run: |
+          # Create namespace if it doesn't exist (idempotent — swallow "already" errors)
+          npx ovsx create-namespace AnandSundaramoorthySa -p "$OVSX_PAT" 2>&1 \
+            | tee /tmp/ovsx-ns.log \
+            || grep -qiE "(already exists|already been registered|already taken|namespace.*exists)" /tmp/ovsx-ns.log
+          npx ovsx publish -p "$OVSX_PAT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
